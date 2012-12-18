@@ -5,14 +5,18 @@ Bundler.require
 require 'eventmachine'
 require 'em-websocket'
 require 'em-hiredis'
+require 'json'
+
+require_relative 'app'
 
 EventMachine.run do
 
-  puts 'EM started'
+  puts 'Game server started... ;)'
 
   @sockets = []
-  @channels = {:asd => 123}
-  @channel = EventMachine::Channel.new
+  @channels = {}
+  @chat = EventMachine::Channel.new
+  @app = App.new
 
   EventMachine::WebSocket.start(:host => 'localhost', :port => 9020) do |socket|
   # EventMachine::WebSocket.start(:host => '10.20.1.9', :port => 9020) do |socket|
@@ -21,20 +25,29 @@ EventMachine.run do
       @sockets << socket
       puts "WebSocket opened!"
 
-      cid = @channel.subscribe do |msg|
+      cid = @chat.subscribe do |msg|
         puts "on subscribe #{msg}"
       end
       @channels[socket] = cid
     end
 
     socket.onmessage do |msg|
-      @channel.push(msg)
+      begin
+        data = JSON.parse(msg)
+      rescue JSON::ParserError => e
+        puts e
+      else
+        puts data
+        if data['subtype'] == 'init'
+          @app.register(data['data'], socket)
+        end
+      end
     end
 
     socket.onclose do
       cid = @channels[socket]
       @sockets.delete socket
-      @channel.unsubscribe(cid)
+      @chat.unsubscribe(cid)
       puts "WebSocket closed!"
     end
   end

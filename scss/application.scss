@@ -1,0 +1,24 @@
+$canvas-width: 640px;
+$canvas-height: 480px;
+$chat-width: 300px;
+$menu-width: $canvas-width + $chat-width;
+
+#canvas-container {
+  border: 1px solid red;
+  width: $canvas-width;
+  height: $canvas-height;
+  float: left;
+}
+#chat {
+  float: left;
+  width: $chat-width;
+  height: $canvas-height;
+  border: 1px solid lime;
+}
+#menu {
+  width: $menu-width;
+  height: 50px;
+  border: 1px solid black;
+  clear: both;
+}
+

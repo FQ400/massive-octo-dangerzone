@@ -5,6 +5,9 @@ Bundler.require
 require 'eventmachine'
 require 'em-websocket'
 require 'em-hiredis'
+require 'json'
+
+require_relative 'app'
 
 EventMachine.run do
 
@@ -13,6 +16,7 @@ EventMachine.run do
   @sockets = []
   @channels = {}
   @chat = EventMachine::Channel.new
+  @app = App.new
 
   EventMachine::WebSocket.start(:host => 'localhost', :port => 9020) do |socket|
   # EventMachine::WebSocket.start(:host => '10.20.1.9', :port => 9020) do |socket|
@@ -28,7 +32,15 @@ EventMachine.run do
     end
 
     socket.onmessage do |msg|
-      @chat.push(msg)
+      begin
+        data = JSON.parse(msg)
+      rescue JSON::ParserError
+      else
+        puts data
+        if data['subtype'] == 'register'
+          @app.register(data['data'])
+        end
+      end
     end
 
     socket.onclose do

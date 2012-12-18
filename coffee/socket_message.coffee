@@ -13,7 +13,7 @@ class WSPayload
     JSON.stringify
       type    : @options.type
       subtype : @options.subtype
-      data    : 'Hi Server'
+      data    : @options.data
 
 
 class ChatPayload extends WSPayload

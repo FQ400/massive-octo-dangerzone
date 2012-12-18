@@ -20,7 +20,7 @@ WSPayload = (function() {
     return JSON.stringify({
       type: this.options.type,
       subtype: this.options.subtype,
-      data: 'Hi Server'
+      data: this.options.data
     });
   };
 

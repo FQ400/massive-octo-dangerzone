@@ -1,33 +1,34 @@
 class Game
   
   options:
-    timeout: 100
-    ws_host: 'ws://localhost:9020'
+    timeout   : 100
+    ws_host   : 'ws://localhost:9020'
+    nickname  : 'fnord'
   
-  constructor: (opts, mediator) ->
+  constructor: (opts) ->
     # overwrite default options
     $.extend(@options, opts)
     
-    @pubsub = new Mediator()
+    console.log(@options)
+    
+    # @pubsub = new Mediator()
     
     @ws = new WebSocket(@options.ws_host)
     @ws.onopen = =>
-      payload = new ChatPayload({subtype: 'new_message'})
-      payload.data = "Hallo Torsten. :)"
+      payload = new WSPayload()
+        data: 1
+          nickname: @options.nickname
       
-      console.log new WSPayload({subtype: 'open'}).type()
+      @ws.send(new WSPayload(payload.stringify())
       
-      @ws.send(new WSPayload({subtype: 'open'}).stringify())
-      @ws.send("Hi Server2")
-      
-    @ws.onmessage = (msg) ->
-      # @pubsub.Subscribe(msg)
-      data = JSON.parse(msg)
-      console.log data.type
+    # @ws.onmessage = (msg) =>
+    #   # @pubsub.Subscribe(msg)
+    #   # data = JSON.parse(msg)
+    #   console.log msg
       
     @ws.onerror = => @error()
     @ws.onclose = => @close()
-    
+  
   error: ->
     console.log new WSPayload({subtype: 'error'}).type()
     

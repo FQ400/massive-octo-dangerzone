@@ -1,7 +1,8 @@
 class WSPayload
   
   options:
-    type : 'socket'
+    type    : 'socket'
+    subtype : 'init'
   
   constructor: (opts) ->
     $.extend(@options, opts)
@@ -13,7 +14,7 @@ class WSPayload
     JSON.stringify
       type    : @options.type
       subtype : @options.subtype
-      data    : 'Hi Server'
+      data    : @options.data
 
 
 class ChatPayload extends WSPayload

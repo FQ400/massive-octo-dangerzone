@@ -5,18 +5,21 @@ Game = (function() {
 
   Game.prototype.options = {
     timeout: 100,
-    ws_host: 'ws://localhost:9020'
+    ws_host: 'ws://localhost:9020',
+    nickname: 'fnord'
   };
 
-  function Game(opts, mediator) {
+  function Game(opts) {
     var _this = this;
     $.extend(this.options, opts);
     this.pubsub = new Mediator();
     this.ws = new WebSocket(this.options.ws_host);
     this.ws.onopen = function() {
       var payload;
-      payload = new ChatPayload({
-        subtype: 'new_message'
+      payload = new WSPayload({
+        data: {
+          nickname: _this.options.nickname
+        }
       });
       payload.data = "Hallo Torsten. :)";
       console.log(new WSPayload({

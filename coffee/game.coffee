@@ -1,6 +1,6 @@
 class Game
   
-  options: 
+  options:
     timeout: 100
     ws_host: 'ws://localhost:9020'
   
@@ -18,7 +18,8 @@ class Game
       
     @ws.onmessage = (msg) ->
       # @pubsub.Subscribe(msg)
-      console.log msg.data
+      data = JSON.parse(msg)
+      console.log data.type
       
     @ws.onerror = => @error()
     @ws.onclose = => @close()
@@ -28,5 +29,3 @@ class Game
     
   close: ->
     console.log new WSPayload({subtype: 'close'}).type()
-    
-  

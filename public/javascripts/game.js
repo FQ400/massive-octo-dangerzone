@@ -14,6 +14,11 @@ Game = (function() {
     this.pubsub = new Mediator();
     this.ws = new WebSocket(this.options.ws_host);
     this.ws.onopen = function() {
+      var payload;
+      payload = new ChatPayload({
+        subtype: 'new_message'
+      });
+      payload.data = "Hallo Torsten. :)";
       console.log(new WSPayload({
         subtype: 'open'
       }).type());

@@ -12,7 +12,11 @@ class Game
     
     @ws = new WebSocket(@options.ws_host)
     @ws.onopen = =>
+      payload = new ChatPayload({subtype: 'new_message'})
+      payload.data = "Hallo Torsten. :)"
+      
       console.log new WSPayload({subtype: 'open'}).type()
+      
       @ws.send(new WSPayload({subtype: 'open'}).stringify())
       @ws.send("Hi Server2")
       

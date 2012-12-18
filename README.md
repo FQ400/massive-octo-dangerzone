@@ -16,5 +16,3 @@ coffee --bare --watch --output public/javascripts coffee/
 Resources
 
 http://buildnewgames.com/websockets/
-
-hohoasd

@@ -8,11 +8,11 @@ require 'em-hiredis'
 
 EventMachine.run do
 
-  puts 'EM started'
+  puts 'Game server started... ;)'
 
   @sockets = []
   @channels = {}
-  @channel = EventMachine::Channel.new
+  @chat = EventMachine::Channel.new
 
   EventMachine::WebSocket.start(:host => 'localhost', :port => 9020) do |socket|
   # EventMachine::WebSocket.start(:host => '10.20.1.9', :port => 9020) do |socket|
@@ -21,20 +21,20 @@ EventMachine.run do
       @sockets << socket
       puts "WebSocket opened!"
 
-      cid = @channel.subscribe do |msg|
+      cid = @chat.subscribe do |msg|
         puts "on subscribe #{msg}"
       end
       @channels[socket] = cid
     end
 
     socket.onmessage do |msg|
-      @channel.push(msg)
+      @chat.push(msg)
     end
 
     socket.onclose do
       cid = @channels[socket]
       @sockets.delete socket
-      @channel.unsubscribe(cid)
+      @chat.unsubscribe(cid)
       puts "WebSocket closed!"
     end
   end

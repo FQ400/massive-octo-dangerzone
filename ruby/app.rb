@@ -7,7 +7,7 @@ class App
 
   def register data
     puts data
-    user = User.new(data['nickname'])
+    user = User.new(data['name'])
     @users.push(user)
   end
 end

@@ -34,10 +34,11 @@ EventMachine.run do
     socket.onmessage do |msg|
       begin
         data = JSON.parse(msg)
-      rescue JSON::ParserError
+      rescue JSON::ParserError => e
+        puts e
       else
         puts data
-        if data['subtype'] == 'register'
+        if data['subtype'] == 'init'
           @app.register(data['data'])
         end
       end

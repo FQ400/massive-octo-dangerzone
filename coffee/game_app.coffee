@@ -9,6 +9,6 @@ class GameApp
       event.preventDefault()
       
       game = new Game
-        nick_name: $('#username').val()
+        name: $('#username').val()
       
       

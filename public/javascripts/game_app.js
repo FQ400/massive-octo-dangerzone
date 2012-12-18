@@ -13,7 +13,7 @@ GameApp = (function() {
       var game;
       event.preventDefault();
       return game = new Game({
-        nick_name: $('#username').val()
+        name: $('#username').val()
       });
     });
   };

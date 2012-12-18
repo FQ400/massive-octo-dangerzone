@@ -39,7 +39,7 @@ EventMachine.run do
       else
         puts data
         if data['subtype'] == 'init'
-          @app.register(data['data'])
+          @app.register(data['data'], socket)
         end
       end
     end

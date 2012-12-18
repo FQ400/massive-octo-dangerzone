@@ -1,6 +1,6 @@
 class User
-  def initialize name
+  def initialize name, socket
     @name = name
-    puts name
+    @socket = socket
   end
 end

@@ -9,12 +9,16 @@ require 'json'
 
 require_relative 'app'
 
+def bla
+  puts 'bla'
+end
+
 EventMachine.run do
 
   puts 'Game server started... ;)'
 
   @sockets = []
-  @channels = {}
+  @channel_subscribers = {}
   @chat = EventMachine::Channel.new
   @app = App.new
 
@@ -28,7 +32,7 @@ EventMachine.run do
       cid = @chat.subscribe do |msg|
         puts "on subscribe #{msg}"
       end
-      @channels[socket] = cid
+      @channel_subscribers[socket] = cid
     end
 
     socket.onmessage do |msg|
@@ -39,13 +43,16 @@ EventMachine.run do
       else
         puts data
         if data['subtype'] == 'init'
-          @app.register(data['data'], socket)
+          @app.register(data['data'], socket) do
+            puts 1234567890
+          end
         end
       end
+      socket.send({:type => :chat, :subtype => :new_message, :data => "neuer Nutzer #{data['data']['name']}" }.to_json)
     end
 
     socket.onclose do
-      cid = @channels[socket]
+      cid = @channel_subscribers[socket]
       @sockets.delete socket
       @chat.unsubscribe(cid)
       puts "WebSocket closed!"

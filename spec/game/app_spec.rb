@@ -8,6 +8,7 @@ describe App do
 
   it 'should setup an empty hash to store the player' do
     app = App.new
-    assigns(:users).should be_an_instance_of(Hash)
+    users = app.instance_variable_get(:@users)
+    users.should be_an_instance_of(Hash)
   end
 end

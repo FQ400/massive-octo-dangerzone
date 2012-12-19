@@ -1,3 +1,7 @@
+require 'rspec'
+require 'rspec'
+
+
 APP_ROOT = File.expand_path(File.join(File.dirname(__FILE__), ".."))
 
 DO_NOT_REQUIRE_THIS_FILES = [

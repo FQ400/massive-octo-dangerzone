@@ -43,9 +43,7 @@ EventMachine.run do
       else
         puts data
         if data['subtype'] == 'init'
-          @app.register(data['data'], socket) do
-            puts 1234567890
-          end
+          @app.register(data['data'], socket)
         end
       end
       socket.send({:type => :chat, :subtype => :new_message, :data => "neuer Nutzer #{data['data']['name']}" }.to_json)

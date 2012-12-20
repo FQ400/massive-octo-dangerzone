@@ -1,7 +1,7 @@
 class WSPayload
   
   options:
-    type    : 'socket'
+    type    : 'general'
     subtype : 'init'
   
   constructor: (opts) ->
@@ -24,3 +24,7 @@ class ChatPayload extends WSPayload
   
   constructor: (opts) ->
     super
+
+class GamePayload extends WSPayload
+  options:
+    type: 'game'

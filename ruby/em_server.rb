@@ -9,10 +9,6 @@ require 'json'
 
 require_relative 'app'
 
-def bla
-  puts 'bla'
-end
-
 EventMachine.run do
 
   puts 'Game server started... ;)'
@@ -33,8 +29,13 @@ EventMachine.run do
         puts e
       else
         puts data
-        if data['subtype'] == 'init'
-          @app.register(data['data'], socket)
+        case data['type']
+        when 'general' then
+          case data['subtype']
+          when 'init' then @app.register(data['data'], socket)
+          end
+        when 'chat' then @app.chat_message(data, socket)
+        when 'game' then @app.game_message(data, socket)
         end
       end
     end

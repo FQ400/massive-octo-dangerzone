@@ -27,13 +27,15 @@ class Game
     mediator.Subscribe 'user:created', (data) =>
       User.create(data)
 
+    mediator.Subscribe 'game:join', (data) =>
+      @user_join(data)
+
   openCallback: ->
     payload = new WSPayload
       data:
         name: @options.name
 
     @ws.send(payload.stringify())
-
 
   error: ->
     console.log "There was an Error."
@@ -42,7 +44,6 @@ class Game
     console.log "Socket closed."
 
   messageCallback: (msg) ->
-
     try
       data = JSON.parse(msg.data)
     catch error
@@ -50,3 +51,20 @@ class Game
       return false
 
     @pubsub.Publish([data['type'], data['subtype']].join(':'), data)
+
+  send_chat: (msg) ->
+    payload = new ChatPayload
+      data:
+        message: msg
+      subtype: 'public_message'
+    @ws.send(payload.stringify())
+
+  join: ->
+    payload = new GamePayload
+      subtype: 'join'
+    @ws.send(payload.stringify())
+
+  leave: ->
+    payload = new GamePayload
+      subtype: 'leave'
+    @ws.send(payload.stringify())

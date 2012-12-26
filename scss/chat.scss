@@ -1,0 +1,22 @@
+#chat {
+  position: relative;
+}
+
+#chat-content {
+  width: 100%;
+  height: 100%;
+  overflow-y: scroll;
+  word-wrap: break-word;
+  border: 2px solid orange;
+}
+
+.chat-msg-input-container {
+  position: absolute;
+  bottom: 0;
+
+
+}
+
+#chat {
+  color: red;
+}

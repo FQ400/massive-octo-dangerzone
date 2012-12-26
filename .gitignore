@@ -1,5 +1,4 @@
 .DS_Store
 .sass-cache/
-public/javascripts
-!public/javascripts/kinetic-v4.1.2.min.js
-!public/javascripts/mediator.js
+public/javascripts/generated
+

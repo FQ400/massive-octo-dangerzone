@@ -5,6 +5,7 @@ class GameApp
     
   bind_page_events: ->
     $('#start-game').on 'click', (event) =>
+      event.preventDefault()
       name = $('#username').val()
       if name
         event.preventDefault()
@@ -14,10 +15,10 @@ class GameApp
       
     $('#chat-submit').on 'click', (event) =>
       event.preventDefault()
-      message = $('#chat-msg').val()
+      message = $('#chat-msg-input').val()
       if @game and message
         @game.send_chat(message)
-        $('#chat-msg').val('')
+        $('#chat-msg-input').val('')
 
   enable_join_controls: ->
     $('#menu').html('<a id="join-game" href="#join" title="join">Join</a>')

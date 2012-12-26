@@ -1,4 +1,5 @@
 .DS_Store
 .sass-cache/
 public/javascripts/generated
+public/stylesheets
 

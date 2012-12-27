@@ -5,28 +5,37 @@ require_relative 'user'
 require_relative 'game'
 
 class App
+
   def initialize
     @users = {}
     @chat = EventMachine::Channel.new
     @game = Game.new(self)
+    @update_running = false
   end
 
   def register(data, socket)
     name = data['name']
     remove_user(name)
-    chat_id = @chat.subscribe do |msg|
-      socket.send(msg)
-    end
-    @users[socket] = User.new(name, socket, chat_id)
+    count = @users.count 
+    return if count >= 4
+    user = User.new(name, socket)
+    user.subscribe(@chat, :chat)
+    @users[socket] = user
     chat_all("User '#{name}' signed on")
+    msg = {:type => :user, :subtype => :created, :data => name}.to_json
+    message_all(msg)
   end
 
   def remove_user(crit)
     user = find_user(crit)
     unless user.nil?
-      @chat.unsubscribe(user.chat_id)
+      @game.leave(user)
+      user.unsubscribe(@chat, :chat)
       chat_all("User '#{user.name}' signed off")
+      puts "removed #{user.name}"
       @users.delete user.socket
+      msg = {:type => :user, :subtype => :deleted, :data => user.name}.to_json
+      message_all(msg)
     end
   end
 
@@ -38,7 +47,7 @@ class App
   end
 
   def message_all(_message)
-    @users.each do |user|
+    @users.values.each do |user|
       message(user, _message)
     end
   end
@@ -63,9 +72,12 @@ class App
   end
 
   def game_message(data, socket)
+    user = find_user(socket)
     case data['subtype']
-    when 'join' then user_join(find_user(socket))
-    when 'leave' then user_leave(find_user(socket))
+    when 'join' then user_join(user)
+    when 'leave' then user_leave(user)
+    when 'keydown' then key_down(user, data['data'])
+    when 'keyup' then key_up(user, data['data'])
     end
   end
 
@@ -77,5 +89,34 @@ class App
   def user_leave(user)
     return if user.nil?
     @game.leave(user)
+  end
+
+  def key_down(user, code)
+    case code
+    when 37 then user.key_left(1)
+    when 38 then user.key_up(1)
+    when 39 then user.key_right(1)
+    when 40 then user.key_down(1)
+    end
+  end
+
+  def key_up(user, code)
+    case code
+    when 37 then user.key_left(0)
+    when 38 then user.key_up(0)
+    when 39 then user.key_right(0)
+    when 40 then user.key_down(0)
+    end
+  end
+
+  def ping
+    return if @update_running
+    @update_running = true
+    @game.move_users
+    positions = {:user => @game.user_pos, :object => {}}
+    data = {:positions => positions}
+    msg = {:type => 'game', :subtype => 'state', :data => data}.to_json
+    message_all(msg)
+    @update_running = false
   end
 end

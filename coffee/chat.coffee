@@ -1,5 +1,9 @@
 class Chat
-  
-  @addMessage: (data) ->
+
+  constructor: ->
+    @messages = []
+
+  addMessage: (data) ->
     msg = data['data']
-    $('#chat').prepend("<p>#{ msg }</p>")
+    @messages.push("<p>#{msg}</p>")
+    $('#chat-messages').html(@messages[-10..].join(''))

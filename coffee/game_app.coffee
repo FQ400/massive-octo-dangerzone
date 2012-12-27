@@ -2,6 +2,7 @@ class GameApp
   
   constructor: ->
     @bind_page_events()
+    $('#username').val('default')
     
   bind_page_events: ->
     $('#start-game').on 'click', (event) =>
@@ -18,6 +19,14 @@ class GameApp
       if @game and message
         @game.send_chat(message)
         $('#chat-msg').val('')
+
+    $('#canvas-container').on 'keydown', (event) =>
+      event.preventDefault()
+      @game.keydown(event.keyCode)
+
+    $('#canvas-container').on 'keyup', (event) =>
+      event.preventDefault()
+      @game.keyup(event.keyCode)
 
   enable_join_controls: ->
     $('#menu').html('<a id="join-game" href="#join" title="join">Join</a>')

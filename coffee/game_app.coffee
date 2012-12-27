@@ -7,10 +7,12 @@ class GameApp
   bind_page_events: ->
     $('#start-game').on 'click', (event) =>
       name = $('#username').val()
+      icon = $('#icon').val()
       if name
         event.preventDefault()
         @game = new Game
           name: name
+          icon: icon
         @enable_join_controls()
       
     $('#chat-submit').on 'click', (event) =>

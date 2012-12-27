@@ -1,8 +1,13 @@
 class User
 
-  constructor: (name) ->
+  constructor: (name, icon, position) ->
     @name = name
-    @position = [0, 0]
+    if icon
+      @icon = new Image()
+      @icon.src = icon
+    else
+      icon = null
+    @position = position
 
   set_position: (pos) ->
     @position = pos

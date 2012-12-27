@@ -4,6 +4,7 @@ class Game
     timeout   : 100
     ws_host   : 'ws://localhost:9020'
     name      : 'fnord'
+    icon      : null
 
   constructor: (opts) ->
     # overwrite default options
@@ -27,10 +28,6 @@ class Game
     mediator.Subscribe 'chat:new_message', (data) =>
       @chat.addMessage(data)
 
-    mediator.Subscribe 'user:created', (data) =>
-      name = data.data
-      @user_created(name)
-
     mediator.Subscribe 'object:created', (data) =>
       id = data.id
       data = data.data
@@ -51,15 +48,19 @@ class Game
       @user_leave(data.data.user)
 
     mediator.Subscribe 'game:init', (data) =>
-      @init_state(data)
+      @init_state()
 
     mediator.Subscribe 'game:state', (data) =>
       @update_state(data)
+
+    mediator.Subscribe 'game:user_list', (data) =>
+      @user_list(data)
 
   openCallback: ->
     payload = new WSPayload
       data:
         name: @options.name
+        icon: @options.icon
 
     @ws.send(payload.stringify())
 
@@ -103,9 +104,9 @@ class Game
   user_leave: (user) ->
     console.log("leave: " + user)
 
-  user_created: (name) ->
-    console.log('created: ' + name)
-    @users[name] = new User(name)
+  user_list: (data) ->
+    for user in data.data.users
+      @users[user.name] = new User(user.name, user.icon, user.position)
 
   user_deleted: (name) ->
     if @users[name]
@@ -120,10 +121,7 @@ class Game
       console.log('deleted: ' + id)
       delete @objects[id]
 
-  init_state: (data) ->
-    console.log(data)
-    for name, user of data.data.users
-      @users[name] = new User(name)
+  init_state: ->
     @initialized = true
 
   update_state: (data) ->

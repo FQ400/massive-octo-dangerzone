@@ -18,12 +18,10 @@ class App
     remove_user(name)
     count = @users.count 
     return if count >= 4
-    user = User.new(name, socket)
+    user = User.new(name, socket, data['icon'])
     user.subscribe(@chat, :chat)
     @users[socket] = user
     chat_all("User '#{name}' signed on")
-    msg = {:type => :user, :subtype => :created, :data => name}.to_json
-    message_all(msg)
   end
 
   def remove_user(crit)

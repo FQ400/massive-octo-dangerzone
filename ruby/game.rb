@@ -14,12 +14,12 @@ class Game
 
   def join(user)
     return if @users.include?(user)
-    init_user(user)
     @users.push(user)
     @app.chat_all("User '#{user.name}' joined the game")
-    data = {:user => user.name}
-    msg = {:type => :game, :subtype => :join, :data => data}.to_json
-    @app.message_all(msg)
+    init_user(user)
+    update_user_list()
+    msg = {:type => :game, :subtype => :init}.to_json
+    user.socket.send(msg)
   end
   
   def leave(user)
@@ -31,13 +31,15 @@ class Game
   end
 
   def init_user(user)
-    users = {}
-    @users.each { |_user| users[_user.name] = {:name => _user.name}}
-    data = {:users => users}
-    msg = {:type => :game, :subtype => :init, :data => data}.to_json
-    @app.message(user, msg)
     user.subscribe(@channel, :game)
     user.init_position(@start_positions.pop)
+  end
+
+  def update_user_list()
+    users = @users.collect { |user| {:name => user.name, :icon => user.icon, :position => user.position.to_a}}
+    data = {:users => users}
+    msg = {:type => :game, :subtype => :user_list, :data => data}.to_json
+    @channel.push(msg)
   end
 
   def move_users

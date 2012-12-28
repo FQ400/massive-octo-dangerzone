@@ -9,34 +9,68 @@
   <link rel="stylesheet" href="stylesheets/generated/application.css" type="text/css" media="screen" charset="utf-8">
 </head>
 <body>
-  <h1>Massive Octo Dangerzone</h1>
-  <div id="canvas-container" tabindex="0"><canvas id='game_canvas' width="640" height="480"></canvas></div>
-  <section id="chat">
+  <div id="page-container">
+    <h1>Massive Octo Dangerzone</h1>
+    <div id="canvas-container" tabindex="0"><canvas id='game_canvas' width="640" height="480"></canvas></div>
+    <section id="chat">
     <div id="chat-content">
     </div>
     <div class="chat-msg-input-container">
       <input id="chat-msg-input" type="text">
       <input id="chat-submit" type="submit">
     </div>
-  </section>
-  <div id="menu">
+    </section>
+    <div id="menu">
       <a id="start-game" href="#start" title="start">Start</a><br/>
       Username:
       <input id="username" type="text">
       Avatar:
       <input id="icon" type="text">
+    </div>
   </div>
-  <script src="javascripts/jquery-1.8.2.min.js"></script>
-  <script src="javascripts/kinetic-v4.1.2.min.js"></script>
-  <script src="javascripts/mediator.js"></script>
-  <script src="javascripts/generated/game_app.js"></script>
-  <script src="javascripts/generated/socket_message.js"></script>
-  <script src="javascripts/generated/chat.js"></script>
-  <script src="javascripts/generated/game.js"></script>
-  <script src="javascripts/generated/user.js"></script>
-  <script src="javascripts/generated/canvas.js"></script>
-  <script>
-    var app = new GameApp();
-  </script>
+<script src="javascripts/vendor/require-2.1.1.js"></script>
+<script>
+// Configure the AMD module loader
+requirejs.config({
+  // The path where your JavaScripts are located
+  baseUrl: 'http://localhost:8080/javascripts',
+  // Specify the paths of vendor libraries
+  paths: {
+    jquery: 'vendor/jquery-1.8.2.min',
+    underscore: 'vendor/underscore-1.4.2',
+    backbone: 'vendor/backbone-0.9.2',
+    handlebars: 'vendor/handlebars-1.0.rc.1',
+    text: 'vendor/require-text-2.0.3',
+    chaplin: 'vendor/chaplin-1.0.0-pre-59cac06',
+    kinetic: 'vendor/kinetic-v4.1.2.min'
+  },
+  // Underscore and Backbone are not AMD-capable per default,
+  // so we need to use the AMD wrapping of RequireJS
+  shim: {
+    underscore: {
+      exports: '_'
+    },
+    backbone: {
+      deps: ['underscore', 'jquery'],
+      exports: 'Backbone'
+    },
+    handlebars: {
+      exports: 'Handlebars'
+    },
+    kinetic: {
+      exports: 'Kinetic'
+    }
+  },
+  // For easier development, disable browser caching
+  // Of course, this should be removed in a production environment
+  urlArgs: 'bust=' +  (new Date()).getTime()
+});
+
+// Bootstrap the application
+require(['mod_application'], function (MODApplication) {
+  //var app = new MODApplication();
+  //app.initialize();
+});
+</script>
 </body>
 </html>

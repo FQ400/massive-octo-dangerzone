@@ -10,5 +10,7 @@ define [
 
     initialize: ->
       super
+      @initDispatcher()
+      @initLayout()
       @initRouter routes
       Object.freeze? this

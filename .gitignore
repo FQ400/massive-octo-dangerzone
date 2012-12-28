@@ -2,5 +2,5 @@
 .sass-cache/
 public/javascripts/*
 !public/javascripts/vendor
-!public/javascripts/vendor/*
+!public/javascripts/templates
 public/stylesheets

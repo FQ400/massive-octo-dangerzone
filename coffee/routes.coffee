@@ -2,4 +2,4 @@ define ->
   'use strict'
 
   (match) ->
-    match ''              , 'mod#show'
+    match '', 'mod#show'

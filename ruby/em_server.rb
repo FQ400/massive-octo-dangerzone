@@ -45,4 +45,8 @@ EventMachine.run do
       puts "WebSocket closed!"
     end
   end
+
+  EventMachine.add_periodic_timer(0.01) do
+    @app.ping
+  end
 end

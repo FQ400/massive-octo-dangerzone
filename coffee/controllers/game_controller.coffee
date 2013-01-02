@@ -15,6 +15,7 @@ define [
       super
       @users = []
       @initialized = false
+      @subscribeToChannels()
 
     subscribeToChannels: ->
       mediator = Chaplin.mediator

@@ -89,21 +89,21 @@ class App
     @game.leave(user)
   end
 
-  def key_down(user, code)
-    case code
-    when 37 then user.key_left(1)
-    when 38 then user.key_up(1)
-    when 39 then user.key_right(1)
-    when 40 then user.key_down(1)
+  def key_down(user, key)
+    case key
+    when 'left' then user.key_left(1)
+    when 'up' then user.key_up(1)
+    when 'right' then user.key_right(1)
+    when 'down' then user.key_down(1)
     end
   end
 
-  def key_up(user, code)
-    case code
-    when 37 then user.key_left(0)
-    when 38 then user.key_up(0)
-    when 39 then user.key_right(0)
-    when 40 then user.key_down(0)
+  def key_up(user, key)
+    case key
+    when 'left' then user.key_left(0)
+    when 'up' then user.key_up(0)
+    when 'right' then user.key_right(0)
+    when 'down' then user.key_down(0)
     end
   end
 

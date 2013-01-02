@@ -7,3 +7,4 @@ define [
 
     defaults:
       title: 'Massive Octo Dangerzone'
+      

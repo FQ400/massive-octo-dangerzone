@@ -2,8 +2,9 @@ define [
   'chaplin',
   'views/mod_view',
   'models/mod',
-  'controllers/game_controller'
-], (Chaplin, MODView, MoD, GameController) ->
+  'controllers/game_controller',
+  'controllers/chat_controller'
+], (Chaplin, MODView, MoD, GameController, ChatController) ->
   'use strict'
 
   class MODController extends Chaplin.Controller
@@ -21,9 +22,12 @@ define [
         if name
           event.preventDefault()
           @game = new GameController
+          @game.show({
             name: name
             icon: icon
-          @game.show()
+          })
+          @chat = new ChatController
+          @chat.show()
           @enable_join_controls()
 
       $('#canvas-container').on 'keydown', (event) =>

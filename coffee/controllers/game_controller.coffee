@@ -4,54 +4,32 @@ define [
   'models/game',
   'controllers/chat_controller',
   'controllers/canvas_controller',
-  'models/ws_payload',
   'models/game_payload',
-  'models/chat_payload',
   'models/user',
-], (Chaplin, GameView, Game, ChatController, CanvasController, WSPayload, GamePayload, ChatPayload, User) ->
+], (Chaplin, GameView, Game, ChatController, CanvasController, GamePayload, User) ->
   'use strict'
 
   class GameController extends Chaplin.Controller
 
-    options:
-      timeout   : 100
-      ws_host   : 'ws://localhost:9020'
-      name      : 'fnord'
-      icon      : null
-
-    constructor: (opts) ->
+    constructor: ->
       super
-      $.extend(@options, opts)
-
-      @pubsub = Chaplin.mediator
-      @subscribeToChannels(@pubsub)
-
       @users = []
-      @chat = new ChatController(this)
       @initialized = false
 
-      @ws = new WebSocket(@options.ws_host)
-      @ws.onopen = => @openCallback()
-      @ws.onerror = => @error()
-      @ws.onclose = => @close()
-      @ws.onmessage = (msg) => @messageCallback(msg)
-
-    subscribeToChannels: (mediator, data) ->
-      mediator.subscribe 'chat:new_message', (data) =>
-        @chat.new_message(data)
-
-      mediator.subscribe 'object:created', (data) =>
-        id = data.id
-        data = data.data
-        @object_created(id, data)
+    subscribeToChannels: ->
+      mediator = Chaplin.mediator
+      # mediator.subscribe 'object:created', (data) =>
+      #   id = data.id
+      #   data = data.data
+      #   @object_created(id, data)
 
       mediator.subscribe 'user:deleted', (data) =>
         name = data.data
         @user_deleted(name)
 
-      mediator.subscribe 'object:deleted', (data) =>
-        id = data.id
-        @object_deleted(id)
+      # mediator.subscribe 'object:deleted', (data) =>
+      #   id = data.id
+      #   @object_deleted(id)
 
       mediator.subscribe 'game:join', (data) =>
         @user_join(data.data.user)
@@ -69,51 +47,21 @@ define [
         @user_list(data)
 
     show: (params) ->
-      @model = new Game()
+      @model = new Game(params)
       @view = new GameView(model: @model)
       @canvas = new CanvasController(document.getElementById('game_canvas'))
-      @chat.show()
-
-    openCallback: ->
-      payload = new WSPayload
-        data:
-          name: @options.name
-          icon: @options.icon
-
-      @ws.send(payload.stringify())
-
-    error: ->
-      console.log "There was an Error."
-
-    close: ->
-      console.log "Socket closed."
-
-    messageCallback: (msg) ->
-      try
-        data = JSON.parse(msg.data)
-      catch error
-        console.log error
-        return false
-
-      @pubsub.publish([data['type'], data['subtype']].join(':'), data)
-
-    send_chat: (msg) ->
-      payload = new ChatPayload
-        data:
-          message: msg
-        subtype: 'public_message'
-      @ws.send(payload.stringify())
 
     join: ->
       payload = new GamePayload
         subtype: 'join'
-      @ws.send(payload.stringify())
+      
+      Chaplin.mediator.sendToServer(payload)
       $('#canvas-container').focus()
 
     leave: ->
       payload = new GamePayload
         subtype: 'leave'
-      @ws.send(payload.stringify())
+      Chaplin.mediator.sendToServer(payload)
       @initialized = false
 
     user_join: (user) ->
@@ -160,10 +108,10 @@ define [
       payload = new GamePayload
         subtype: 'keydown'
         data: code
-      @ws.send(payload.stringify())
+      Chaplin.mediator.sendToServer(payload)
 
     keyup: (code) ->
       payload = new GamePayload
         subtype: 'keyup'
         data: code
-      @ws.send(payload.stringify())
+      Chaplin.mediator.sendToServer(payload)

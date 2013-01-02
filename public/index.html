@@ -16,7 +16,7 @@
 // Configure the AMD module loader
 requirejs.config({
   // The path where your JavaScripts are located
-  baseUrl: 'http://localhost:8080/javascripts',
+  baseUrl: location.href + '/javascripts',
   // Specify the paths of vendor libraries
   paths: {
     jquery: 'vendor/jquery-1.8.2.min',

@@ -7,23 +7,16 @@ define [
   class InputController extends Chaplin.Controller
      
     initialize: ->
+      super
       @keys = {37: 'left', 38: 'up', 39: 'right', 40: 'down'}
-        
-      $('#canvas-container').on 'keydown', (event) =>
-        @down(event)
-      
-      $('#canvas-container').on 'keyup', (event) =>
-        @up(event)
+      @subscribeEvent 'internal:canvas_keydown', (code) =>
+        @key('down', code)
+      @subscribeEvent 'internal:canvas_keyup', (code) =>
+        @key('up', code)
 
-    down: (event) ->
-      code = event.keyCode
+    key: (type, code) ->
       if @keys[code]
-        @send('keydown', @keys[code])
-
-    up: (event) ->
-      code = event.keyCode
-      if @keys[code]
-        @send('keyup', @keys[code])
+        @send('key' + type, @keys[code])
 
     send: (type, key) ->
       payload = new GamePayload

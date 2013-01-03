@@ -16,7 +16,7 @@ define [
       @users = []
       @initialized = false
       @subscribeToChannels()
-
+    
     subscribeToChannels: ->
       mediator = Chaplin.mediator
       # mediator.subscribe 'object:created', (data) =>
@@ -24,6 +24,9 @@ define [
       #   data = data.data
       #   @object_created(id, data)
 
+      @subscribeEvent 'internal:game-join', @join
+      @subscribeEvent 'internal:game-leave', @leave
+      
       mediator.subscribe 'user:deleted', (data) =>
         name = data.data
         @user_deleted(name)

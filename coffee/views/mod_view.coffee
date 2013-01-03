@@ -13,6 +13,7 @@ define [
     autoRender: true
 
     initialize: ->
+      super
       @delegate 'click', '#start-game', @setup
       
     setup: (event) ->

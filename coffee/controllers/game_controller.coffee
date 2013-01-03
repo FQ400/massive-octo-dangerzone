@@ -74,6 +74,7 @@ define [
     user_list: (data) ->
       for user in data.data.users
         @users[user.name] = new User(user.name, user.icon, user.position)
+      Chaplin.mediator.publish 'internal:update_users', @users
 
     user_deleted: (name) ->
       if @users[name]
@@ -94,8 +95,8 @@ define [
     update_state: (data) ->
       if @initialized
         @update_positions(data.data.positions)
-        @view.redraw(@users)
 
     update_positions: (positions) ->
       for user, position of positions.user
         @users[user].set_position(position)
+      Chaplin.mediator.publish 'internal:update_positions', @users

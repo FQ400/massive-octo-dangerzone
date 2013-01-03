@@ -1,36 +1,53 @@
 define [
-  'chaplin',
-], (Chaplin) ->
+  'chaplin'
+  'kinetic'
+], (Chaplin, Kinetic) ->
   'use strict'
 
   class Canvas extends Chaplin.Model
 
     constructor: (element) ->
       super
-      @canvas = element
-      @context = @canvas.getContext('2d')
       @image_size = 60
-    
-    draw_user: (user) ->
-      if user.icon
-        @image(user.position, user.icon)
-      else
-        @filled_circle(user.position, 5)
+      @stage = new Kinetic.Stage({container: 'game_canvas', width: 640, height: 480})
+      @users_layer = new Kinetic.Layer()
+      @stage.add(@users_layer)
+      Chaplin.mediator.subscribe 'internal:user_icon_ready', (user) => @update_icon(user)
+      Chaplin.mediator.subscribe 'internal:update_users', (users) => @update_users(users)
+      Chaplin.mediator.subscribe 'internal:update_positions', (users) => @update_positions(users)
 
-    filled_circle: (pos, radius) ->
-      @context.beginPath()
-      @context.arc(pos[0], pos[1], radius, 0, 2*Math.PI)
-      @context.fill()
+    update_users: (users) ->
+      @users = {}
+      for name, user of users
+        if user.icon_ready
+          @set_icon(user)
+        else
+          @users[name] = @circle(5)
+      @reset_users()
 
-    clear: ->
-      @context.clearRect(0, 0, 640, 480)
-
-    image: (pos, icon) ->
+    image: (icon) ->
+      i = @image_size
       ratio = icon.width / icon.height
-      if ratio > 1
-        width = @image_size
-        height = @image_size / ratio
-      else
-        height = @image_size
-        width = @image_size * ratio
-      @context.drawImage(icon, pos[0] + @image_size/2, pos[1] + @image_size/2, width, height)
+      [width, height] = if ratio > 1 then [@i, @i / ratio] else [i * ratio, i]
+      new Kinetic.Image({image: icon, width: width, height: height, offset: [width/2, height/2]})
+
+    circle: (radius) ->
+      new Kinetic.Circle({radius: radius, fill: 'red', stroke: 'black'})
+
+    update_positions: (users) ->
+      for name, user of users
+        pos = user.position
+        @users[name].setPosition(pos[0], pos[1])
+      @users_layer.draw()
+
+    set_icon: (user) ->
+      @users[user.name] = @image(user.icon)
+
+    update_icon: (user) ->
+      @set_icon(user)
+      @reset_users()
+
+    reset_users: ->
+      @users_layer.removeChildren()
+      for name, user of @users
+        @users_layer.add(user)

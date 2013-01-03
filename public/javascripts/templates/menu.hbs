@@ -1,4 +1,4 @@
-<a id="join-game" href="#join" title="join">Join</a>
-<a id="leave-game" href="#leave" title="leave" style="display:none;">Leave</a>
-<a id="configure" href="configure" title="configure">Configure</a>
+{{#each items}}
+  <a id="{{this.id}}" href="{{this.href}}" title="{{this.title}}">{{this.title}}</a>
+{{/each}}
 <div id="config-container"></div>

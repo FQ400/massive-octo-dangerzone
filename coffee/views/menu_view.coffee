@@ -25,8 +25,10 @@ define [
         @publishEvent 'internal:game-leave'
         $('#join-game').show()
         $('#leave-game').hide()
-      
+        
+    afterRender: ->
       super
+      $('#leave-game').hide()
       
       # $('#configure').on 'click', (event) =>
       #   event.preventDefault()

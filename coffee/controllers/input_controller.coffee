@@ -8,12 +8,20 @@ define [
      
     initialize: ->
       @keys = {37: 'left', 38: 'up', 39: 'right', 40: 'down'}
+        
+      $('#canvas-container').on 'keydown', (event) =>
+        @down(event)
+      
+      $('#canvas-container').on 'keyup', (event) =>
+        @up(event)
 
-    down: (code) ->
+    down: (event) ->
+      code = event.keyCode
       if @keys[code]
         @send('keydown', @keys[code])
 
-    up: (code) ->
+    up: (event) ->
+      code = event.keyCode
       if @keys[code]
         @send('keyup', @keys[code])
 

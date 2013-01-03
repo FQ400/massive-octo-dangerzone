@@ -2,8 +2,8 @@ define [
   'chaplin',
   'views/mod_view',
   'models/mod',
-  'controllers/game_controller',
-  'controllers/chat_controller',
+  'controllers/game_controller'
+  'controllers/chat_controller'
   'controllers/input_controller'
 ], (Chaplin, MODView, MoD, GameController, ChatController, InputController) ->
   'use strict'
@@ -13,31 +13,19 @@ define [
     show: (params) ->
       @model = new MoD()
       @view = new MODView(model: @model)
-      @bind_page_events()
-      $('#username').val('default')
+      @subscribeEvent 'internal:start', @initializeGameAndChat
       
-    bind_page_events: ->
-      $('#start-game').on 'click', (event) =>
-        name = $('#username').val()
-        icon = $('#icon').val()
-        if name
-          event.preventDefault()
-          @game = new GameController
-          @game.show({
-            name: name
-            icon: icon
-          })
-          @chat = new ChatController
-          @chat.show()
-          @input = new InputController
-
-      $('#canvas-container').on 'keydown', (event) =>
-        event.preventDefault()
-        @input.down(event.keyCode)
-
-      $('#canvas-container').on 'keyup', (event) =>
-        event.preventDefault()
-        @input.up(event.keyCode)
+    initializeGameAndChat: (data) ->
+      @game = new GameController
+      @game.show({
+        name: data.name
+        icon: data.icon
+      })
+      @chat = new ChatController
+      @chat.show()
+      
+      @input = new InputController
+      @enable_join_controls()
 
     enable_join_controls: ->
       $('#menu').html('<a id="join-game" href="#join" title="join">Join</a><a id="configure" href="configure" title="configure">Configure</a><div id="config-container"></div>')

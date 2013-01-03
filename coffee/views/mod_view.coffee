@@ -20,6 +20,6 @@ define [
       name = $('#username').val()
       icon = $('#icon').val()
       if name
-        @publishEvent 'internal:start', 
+        @publishEvent 'internal:start',
           name: name
           icon: icon

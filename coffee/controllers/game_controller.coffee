@@ -57,7 +57,7 @@ define [
         subtype: 'join'
       
       Chaplin.mediator.sendToServer(payload)
-      $('#canvas-container').focus()
+      $('#game_canvas').focus()
 
     leave: ->
       payload = new GamePayload

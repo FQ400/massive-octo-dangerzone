@@ -3,7 +3,7 @@ define [
 ], (Chaplin) ->
   'use strict'
 
-  class CanvasController extends Chaplin.Controller
+  class Canvas extends Chaplin.Model
 
     constructor: (element) ->
       super

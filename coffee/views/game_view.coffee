@@ -1,7 +1,8 @@
 define [
   'views/base/view'
   'text!templates/game.hbs'
-], (View, template) ->
+  'models/canvas'
+], (View, template, Canvas) ->
   'use strict'
 
   class GameView extends View
@@ -17,3 +18,12 @@ define [
         @publishEvent 'internal:canvas_keydown', event.keyCode
       @delegate 'keyup', '#game_canvas', (event) =>
         @publishEvent 'internal:canvas_keyup', event.keyCode
+
+    afterRender: ->
+      super
+      @canvas = new Canvas(document.getElementById('game_canvas'))
+
+    redraw: (users) ->
+      @canvas.clear()
+      for name, user of users
+        @canvas.draw_user(user)

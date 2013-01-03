@@ -3,10 +3,9 @@ define [
   'views/game_view',
   'models/game',
   'controllers/chat_controller',
-  'controllers/canvas_controller',
   'models/game_payload',
   'models/user',
-], (Chaplin, GameView, Game, ChatController, CanvasController, GamePayload, User) ->
+], (Chaplin, GameView, Game, ChatController, GamePayload, User) ->
   'use strict'
 
   class GameController extends Chaplin.Controller
@@ -53,12 +52,10 @@ define [
     show: (params) ->
       @model = new Game(params)
       @view = new GameView(model: @model)
-      @canvas = new CanvasController(document.getElementById('game_canvas'))
 
     join: ->
       payload = new GamePayload
         subtype: 'join'
-      
       Chaplin.mediator.sendToServer(payload)
       $('#game_canvas').focus()
 
@@ -83,13 +80,13 @@ define [
         console.log('deleted: ' + name)
         delete @users[name]
 
-    object_created: (id, data) ->
-      @objects[id] = new GameObject(id, data)
+    # object_created: (id, data) ->
+    #   @objects[id] = new GameObject(id, data)
 
-    object_deleted: (id) ->
-      if @objects[id]
-        console.log('deleted: ' + id)
-        delete @objects[id]
+    # object_deleted: (id) ->
+    #   if @objects[id]
+    #     console.log('deleted: ' + id)
+    #     delete @objects[id]
 
     init_state: ->
       @initialized = true
@@ -97,25 +94,8 @@ define [
     update_state: (data) ->
       if @initialized
         @update_positions(data.data.positions)
-        @redraw()
+        @view.redraw(@users)
 
     update_positions: (positions) ->
       for user, position of positions.user
         @users[user].set_position(position)
-
-    redraw: ->
-      @canvas.clear()
-      for name, user of @users
-        @canvas.draw_user(user)
-
-    keydown: (code) ->
-      payload = new GamePayload
-        subtype: 'keydown'
-        data: code
-      Chaplin.mediator.sendToServer(payload)
-
-    keyup: (code) ->
-      payload = new GamePayload
-        subtype: 'keyup'
-        data: code
-      Chaplin.mediator.sendToServer(payload)

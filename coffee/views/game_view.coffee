@@ -14,6 +14,6 @@ define [
     initialize: ->
       super
       @delegate 'keydown', '#game_canvas', (event) =>
-        @publishEvent 'canvas:keydown', event.keyCode
+        @publishEvent 'internal:canvas_keydown', event.keyCode
       @delegate 'keyup', '#game_canvas', (event) =>
-        @publishEvent 'canvas:keyup', event.keyCode
+        @publishEvent 'internal:canvas_keyup', event.keyCode

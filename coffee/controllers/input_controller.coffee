@@ -9,9 +9,9 @@ define [
     initialize: ->
       super
       @keys = {37: 'left', 38: 'up', 39: 'right', 40: 'down'}
-      @subscribeEvent 'canvas:keydown', (code) =>
+      @subscribeEvent 'internal:canvas_keydown', (code) =>
         @key('down', code)
-      @subscribeEvent 'canvas:keyup', (code) =>
+      @subscribeEvent 'internal:canvas_keyup', (code) =>
         @key('up', code)
 
     key: (type, code) ->

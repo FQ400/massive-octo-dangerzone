@@ -20,6 +20,8 @@ define [
         @publishEvent 'internal:canvas_keyup', event.keyCode
       @delegate 'mousemove', '#game_canvas', (event) =>
         @publishEvent 'internal:canvas_mouse_move', @page_coords_to_game([event.pageX, event.pageY])
+      @delegate 'click', (event) =>
+        @publishEvent 'internal:shoot', event
 
     afterRender: ->
       super

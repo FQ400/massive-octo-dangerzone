@@ -13,7 +13,6 @@ define [
   class MODController extends Chaplin.Controller
 
     show: (params) ->
-      console.log "MODController#show"
       @model = new MoD()
       @view = new MODView(model: @model)
       @subscribeEvent 'internal:start', @initialize_game_and_chat

@@ -22,7 +22,7 @@ define [
         @send('key' + type, @keys[code])
         
     calc_radiant: (coords) ->
-      p_pos = Chaplin.mediator.user.get_position()
+      p_pos = Chaplin.mediator.user.position
       # mouse position
       mx = coords[0]
       my = coords[1]
@@ -30,8 +30,7 @@ define [
       px = p_pos[0]
       py = p_pos[1]
       
-      theta = Math.atan2(px - mx,py - my);
-      console.log (theta)
+      theta = Math.atan2(px - mx, py - my)
       if theta
         @send('rotate', theta)
     

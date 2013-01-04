@@ -19,7 +19,7 @@ define [
         @send_message()
 
     new_message: (data) ->
-      msg = data['data']
+      msg = data.message
       $('#chat-content').append("<p>#{ msg }</p>")
       # scroll to bottom
       $('#chat-content').scrollTop($('#chat-content').height(), 0)

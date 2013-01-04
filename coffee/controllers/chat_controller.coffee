@@ -31,8 +31,5 @@ define [
           data:
             message: message
           subtype: 'public_message'
-
-        Chaplin.mediator.sendToServer(payload)
+        Chaplin.mediator.send_to_server(payload)
         $('#chat-msg-input').val('')
-        
-      

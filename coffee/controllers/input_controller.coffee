@@ -22,7 +22,7 @@ define [
       payload = new GamePayload
         subtype: type
         data: key
-      Chaplin.mediator.sendToServer(payload)
+      Chaplin.mediator.send_to_server(payload)
 
     configure: (key, code) ->
       old_code = _.invert(@keys)[key]

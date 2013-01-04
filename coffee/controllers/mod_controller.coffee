@@ -1,7 +1,7 @@
 define [
-  'chaplin',
-  'views/mod_view',
-  'models/mod',
+  'chaplin'
+  'views/mod_view'
+  'models/mod'
   'controllers/game_controller'
   'controllers/chat_controller'
   'controllers/menu_controller'
@@ -14,9 +14,9 @@ define [
     show: (params) ->
       @model = new MoD()
       @view = new MODView(model: @model)
-      @subscribeEvent 'internal:start', @initializeGameAndChat
+      @subscribeEvent 'internal:start', @initialize_game_and_chat
       
-    initializeGameAndChat: (data) ->
+    initialize_game_and_chat: (data) ->
       @game = new GameController
       @game.show
         name: data.name

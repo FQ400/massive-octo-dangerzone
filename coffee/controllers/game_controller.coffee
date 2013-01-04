@@ -14,9 +14,9 @@ define [
       super
       @users = {}
       @initialized = false
-      @subscribeToChannels()
+      @subscribe_to_channels()
     
-    subscribeToChannels: ->
+    subscribe_to_channels: ->
       mediator = Chaplin.mediator
       # mediator.subscribe 'object:created', (data) =>
       #   id = data.id
@@ -56,13 +56,13 @@ define [
     join: ->
       payload = new GamePayload
         subtype: 'join'
-      Chaplin.mediator.sendToServer(payload)
+      Chaplin.mediator.send_to_server(payload)
       $('#game_canvas').focus()
 
     leave: ->
       payload = new GamePayload
         subtype: 'leave'
-      Chaplin.mediator.sendToServer(payload)
+      Chaplin.mediator.send_to_server(payload)
       @initialized = false
 
     user_join: (user) ->

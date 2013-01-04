@@ -30,9 +30,9 @@ define [
         # Compile the template string to a function and save it
         # on the prototype. This is a workaround since an instance
         # shouldn’t change its prototype normally.
-        templateFunc = Handlebars.compile template
-        @constructor::template = templateFunc
+        template_func = Handlebars.compile template
+        @constructor::template = template_func
       else
-        templateFunc = template
+        template_func = template
 
-      templateFunc
+      template_func

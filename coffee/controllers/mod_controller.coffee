@@ -21,12 +21,9 @@ define [
       @game.show
         name: data.name
         icon: data.icon
-
+        ws_host: data.host
       @chat = new ChatController
       @chat.show()
-      
       @menu = new MenuController
       @menu.show()
-      
       @input = new InputController
-

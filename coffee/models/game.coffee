@@ -18,13 +18,11 @@ define [
       
     initialize: (opts) ->
       $.extend(@options, opts)
-      
       @ws = new WebSocket(@options.ws_host)
       @ws.onopen = => @openCallback()
       @ws.onerror = => @error()
       @ws.onclose = => @close()
       @ws.onmessage = (msg) => @messageCallback(msg)
-      
   
     openCallback: ->
       Chaplin.mediator.subscribe 'server:send', (data) =>
@@ -52,5 +50,3 @@ define [
       
     sendToServer: (payload) ->
       @ws.send(payload.stringify())
-      
-    

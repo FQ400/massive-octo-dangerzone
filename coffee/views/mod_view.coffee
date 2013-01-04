@@ -20,7 +20,9 @@ define [
       event.preventDefault()
       name = $('#username').val()
       icon = $('#icon').val()
+      host = $('#host').val()
       if name
         @publishEvent 'internal:start',
           name: name
           icon: icon
+          host: host

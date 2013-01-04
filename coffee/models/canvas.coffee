@@ -5,11 +5,12 @@ define [
   'use strict'
 
   class Canvas extends Chaplin.Model
+    container: 'game_canvas'
 
     constructor: (element) ->
       super
       @image_size = 60
-      @stage = new Kinetic.Stage({container: 'game_canvas', width: 640, height: 480})
+      @stage = new Kinetic.Stage({container: @container, width: 640, height: 480})
       @users_layer = new Kinetic.Layer()
       @stage.add(@users_layer)
       Chaplin.mediator.subscribe 'internal:user_icon_ready', (user) => @update_icon(user)

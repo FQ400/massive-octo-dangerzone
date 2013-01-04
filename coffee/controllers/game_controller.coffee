@@ -83,16 +83,10 @@ define [
         @users[user.name] = new User(user.id, user.icon, user.position, user.name)
       Chaplin.mediator.publish 'internal:update_users', @users
 
-    object_list: (data) ->
-      @objects = {}
-      for obj in data.objects
-        @objects[obj.id] = new GameObject(obj.id, obj.icon, obj.position)
-      Chaplin.mediator.publish 'internal:update_objects', @objects
-
     objects_created: (data) ->
       objects = []
       for obj in data.objects
-        @objects[obj.id] = new GameObject(obj.id, obj.icon, obj.position)
+        @objects[obj.id] = new GameObject(obj.id, obj.icon, obj.position, obj.size)
         objects.push(@objects[obj.id])
       Chaplin.mediator.publish 'internal:objects_created', objects
 
@@ -117,7 +111,7 @@ define [
         @update_positions(data.positions, data.angles)
 
     update_positions: (positions, angles) ->
-     for obj in angles
+      for obj in angles
         @objects[obj.id].angle = obj.angle
       for obj in positions
         @objects[obj.id].position = obj.position

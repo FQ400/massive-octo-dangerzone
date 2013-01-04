@@ -32,14 +32,19 @@ define [
 
     objects_deleted: (objects) ->
       for obj in objects
-        @objects[obj.id].remove()
-        delete @objects[obj.id]
+        @delete_object(obj)
       @objects_layer.draw()
 
-    image: (icon) ->
-      i = @image_size
-      ratio = icon.width / icon.height
-      [width, height] = if ratio > 1 then [@i, @i / ratio] else [i * ratio, i]
+    delete_object: (obj) ->
+      @objects[obj.id].remove()
+      delete @objects[obj.id]
+
+    image: (icon, i) ->
+      if i > 0
+        ratio = icon.width / icon.height
+        [width, height] = if ratio > 1 then [@i, @i / ratio] else [i * ratio, i]
+      else
+        [width, height] = [icon.width, icon.height]
       new Kinetic.Image({image: icon, width: width, height: height, offset: [width/2, height/2]})
 
     circle: (radius, color='red') ->
@@ -53,11 +58,10 @@ define [
       @objects_layer.draw()
 
     set_icon: (obj) ->
-      @objects[obj.id] = @image(obj.icon)
+      @objects[obj.id] = @image(obj.icon, obj.size)
       @objects_layer.add(@objects[obj.id])
 
     update_icon: (obj) ->
-      @objects[obj.id].remove()
-      delete @objects[obj.id]
+      @delete_object(obj)
       @set_icon(obj)
       @objects_layer.draw()

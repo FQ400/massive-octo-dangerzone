@@ -12,7 +12,7 @@ define [
 
     constructor: ->
       super
-      @users = []
+      @users = {}
       @initialized = false
       @subscribeToChannels()
     
@@ -74,6 +74,7 @@ define [
     user_list: (data) ->
       for user in data.data.users
         @users[user.name] = new User(user.name, user.icon, user.position)
+      Chaplin.mediator.user = @users[@model.options.name]
       Chaplin.mediator.publish 'internal:update_users', @users
 
     user_deleted: (name) ->

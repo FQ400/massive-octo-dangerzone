@@ -22,3 +22,7 @@ define [
     afterRender: ->
       super
       @canvas = new Canvas(document.getElementById('game_canvas'))
+
+    page_coords_to_game: (pos) ->
+      total_offset = $('#'+@canvas.container).position()
+      [pos[0] - total_offset.left, pos[1] - total_offset.top]

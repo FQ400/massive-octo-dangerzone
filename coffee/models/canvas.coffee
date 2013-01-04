@@ -9,34 +9,32 @@ define [
 
     constructor: (element) ->
       super
+      @objects = {}
       @image_size = 60
       @stage = new Kinetic.Stage({container: @container, width: 640, height: 480})
-      @users_layer = new Kinetic.Layer()
       @objects_layer = new Kinetic.Layer()
-      @stage.add(@users_layer)
       @stage.add(@objects_layer)
       Chaplin.mediator.subscribe 'internal:user_icon_ready', (user) => @update_icon(user)
       Chaplin.mediator.subscribe 'internal:update_users', (users) => @update_users(users)
       Chaplin.mediator.subscribe 'internal:update_objects', (objects) => @update_objects(objects)
+      Chaplin.mediator.subscribe 'internal:objects_created', (objects) => @objects_created(objects)
+      Chaplin.mediator.subscribe 'internal:objects_deleted', (objects) => @objects_deleted(objects)
       Chaplin.mediator.subscribe 'internal:update_positions', (users, objects) => @update_positions(users, objects)
 
-    update_users: (users) ->
-      @users = {}
-      for name, user of users
-        if user.icon_ready
-          @set_user_icon(user)
-        else
-          @users[name] = @circle(5)
-      @reset_users()
-
-    update_objects: (objects) ->
-      @objects = {}
-      for id, obj of objects
+    objects_created: (objects) ->
+      for obj in objects
         if obj.icon_ready
-          @set_object_icon(@objects, obj)
+          @set_icon(obj)
         else
-          @objects[id] = @circle(2, 'green')
-      @reset_objects()
+          @objects[obj.id] = @circle(2, 'green')
+          @objects_layer.add(@objects[obj.id])
+      @objects_layer.draw()
+
+    objects_deleted: (objects) ->
+      for obj in objects
+        @objects[obj.id].remove()
+        delete @objects[obj.id]
+      @objects_layer.draw()
 
     image: (icon) ->
       i = @image_size
@@ -47,33 +45,19 @@ define [
     circle: (radius, color='red') ->
       new Kinetic.Circle({radius: radius, fill: color, stroke: 'black'})
 
-    update_positions: (users, objects) ->
-      for name, user of users
-        pos = user.position
-        @users[name].setPosition(pos[0], pos[1])
-        @users[name].setRotation(user.angle)
+    update_positions: (objects) ->
       for id, obj of objects
         pos = obj.position
-        @objects[id].setPosition(pos[0], pos[1])
-      @users_layer.draw()
+        @objects[obj.id].setPosition(pos[0], pos[1])
+        @objects[obj.id].setRotation(obj.angle)
       @objects_layer.draw()
 
-    set_user_icon: (user) ->
-      @users[user.name] = @image(user.icon)
+    set_icon: (obj) ->
+      @objects[obj.id] = @image(obj.icon)
+      @objects_layer.add(@objects[obj.id])
 
-    set_object_icon: (obj) ->
-      @objects[id] = @image(obj.icon)
-
-    update_icon: (user) ->
-      @set_user_icon(user)
-      @reset_users()
-
-    reset_users: ->
-      @users_layer.removeChildren()
-      for name, user of @users
-        @users_layer.add(user)
-
-    reset_objects: ->
-      @objects_layer.removeChildren()
-      for name, obj of @objects
-        @objects_layer.add(obj)
+    update_icon: (obj) ->
+      @objects[obj.id].remove()
+      delete @objects[obj.id]
+      @set_icon(obj)
+      @objects_layer.draw()

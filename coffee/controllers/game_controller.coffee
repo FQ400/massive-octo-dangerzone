@@ -34,7 +34,7 @@ define [
         @user_leave(data.user)
 
       mediator.subscribe 'game:init', (data) =>
-        @init_state()
+        @init_state(data.id)
 
       mediator.subscribe 'game:state', (data) =>
         @update_state(data)
@@ -44,6 +44,12 @@ define [
 
       mediator.subscribe 'game:object_list', (data) =>
         @object_list(data)
+
+      mediator.subscribe 'game:objects_created', (data) =>
+        @objects_created(data)
+
+      mediator.subscribe 'game:objects_deleted', (data) =>
+        @objects_deleted(data)
 
       mediator.subscribe 'internal:shoot', (data) =>
         @shoot(data)
@@ -65,6 +71,7 @@ define [
       @initialized = false
 
     user_join: (user) ->
+      Chaplin.mediator.user = @users[@user_id]
       console.log("join: " + user)
 
     user_leave: (user) ->
@@ -74,7 +81,6 @@ define [
       @users = {}
       for user in data.users
         @users[user.name] = new User(user.id, user.icon, user.position, user.name)
-      Chaplin.mediator.user = @users[@model.options.name]
       Chaplin.mediator.publish 'internal:update_users', @users
 
     object_list: (data) ->
@@ -83,12 +89,27 @@ define [
         @objects[obj.id] = new GameObject(obj.id, obj.icon, obj.position)
       Chaplin.mediator.publish 'internal:update_objects', @objects
 
+    objects_created: (data) ->
+      objects = []
+      for obj in data.objects
+        @objects[obj.id] = new GameObject(obj.id, obj.icon, obj.position)
+        objects.push(@objects[obj.id])
+      Chaplin.mediator.publish 'internal:objects_created', objects
+
+    objects_deleted: (data) ->
+      objects = []
+      for obj in data.objects
+        delete @objects[obj.id]
+      Chaplin.mediator.publish 'internal:objects_deleted', data.objects
+
     user_deleted: (name) ->
       if @users[name]
         console.log('deleted: ' + name)
         delete @users[name]
 
-    init_state: ->
+    init_state: (id) ->
+      @user_id = id
+      Chaplin.mediator.user = @objects[@user_id]
       @initialized = true
 
     update_state: (data) ->
@@ -96,13 +117,11 @@ define [
         @update_positions(data.positions, data.angles)
 
     update_positions: (positions, angles) ->
-      for user, position of positions.user
-        @users[user].set_position(position)
-      for user, angle of angles.user
-        @users[user].angle = angle 
-      for obj, position of positions.object
-        @objects[obj].position = position
-      Chaplin.mediator.publish 'internal:update_positions', @users, @objects
+     for obj in angles
+        @objects[obj.id].angle = obj.angle
+      for obj in positions
+        @objects[obj.id].position = obj.position
+      Chaplin.mediator.publish 'internal:update_positions', @objects
 
     shoot: (event) ->
       position = @view.page_coords_to_game([event.pageX, event.pageY])

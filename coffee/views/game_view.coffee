@@ -13,13 +13,19 @@ define [
     autoRender: true
 
     initialize: ->
+      @idle = true
+      setInterval(
+        => @idle = true,
+        50)
       super
       @delegate 'keydown', '#game_canvas', (event) =>
         @publishEvent 'internal:canvas_keydown', event.keyCode
       @delegate 'keyup', '#game_canvas', (event) =>
         @publishEvent 'internal:canvas_keyup', event.keyCode
       @delegate 'mousemove', '#game_canvas', (event) =>
-        @publishEvent 'internal:canvas_mouse_move', @page_coords_to_game([event.pageX, event.pageY])
+        if @idle
+          @publishEvent 'internal:canvas_mouse_move', @page_coords_to_game([event.pageX, event.pageY])
+          @idle = false
       @delegate 'click', (event) =>
         @publishEvent 'internal:shoot', event
 

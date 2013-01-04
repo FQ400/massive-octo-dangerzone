@@ -7,13 +7,11 @@ define [
 
     constructor: (id, icon, position) ->
       super
+      @id = id
       @position = position
       @set_icon(icon)
       @icon_ready = false
       @angle = 0
-
-    set_position: (pos) ->
-      @position = pos
 
     set_icon: (icon) ->
       if icon

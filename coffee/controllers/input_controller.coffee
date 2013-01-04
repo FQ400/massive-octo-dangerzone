@@ -22,6 +22,7 @@ define [
         @send('key' + type, @keys[code])
         
     calc_angle: (coords) ->
+      return unless Chaplin.mediator.user
       p_pos = Chaplin.mediator.user.position
       # mouse position
       mx = coords[0]

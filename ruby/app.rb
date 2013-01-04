@@ -71,6 +71,7 @@ class App
 
   def game_message(data, socket)
     user = find_user(socket)
+    return unless user
     case data['subtype']
     when 'join' then user_join(user)
     when 'leave' then user_leave(user)

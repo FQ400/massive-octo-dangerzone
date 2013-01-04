@@ -95,9 +95,17 @@ define [
 
     update_state: (data) ->
       if @initialized
-        @update_positions(data.data.positions)
+        # @update_positions(data.data.positions)
+        @update_positions(data)
 
-    update_positions: (positions) ->
+    update_positions: (data) ->
+      positions = data.data.positions
+      radiants = data.data.radiants
       for user, position of positions.user
         @users[user].set_position(position)
+        
+      for user, radiant of radiants.user
+        @users[user].radiant = radiant 
       Chaplin.mediator.publish 'internal:update_positions', @users
+    
+    

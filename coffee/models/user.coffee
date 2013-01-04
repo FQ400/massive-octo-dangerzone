@@ -10,9 +10,13 @@ define [
       @name = name
       @position = position
       @set_icon(icon)
-
+      @radiant = 0
+      
     set_position: (pos) ->
       @position = pos
+    
+    get_position: ->
+      return @position
 
     set_icon: (icon) ->
       if icon

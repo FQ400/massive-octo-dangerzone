@@ -15,6 +15,7 @@ define [
       Chaplin.mediator.subscribe 'internal:user_icon_ready', (user) => @update_icon(user)
       Chaplin.mediator.subscribe 'internal:update_users', (users) => @update_users(users)
       Chaplin.mediator.subscribe 'internal:update_positions', (users) => @update_positions(users)
+      Chaplin.mediator.subscribe 'internal:update_orientations', (users) => @update_orientations(users)
 
     update_users: (users) ->
       @users = {}
@@ -38,6 +39,8 @@ define [
       for name, user of users
         pos = user.position
         @users[name].setPosition(pos[0], pos[1])
+        @users[name].setRotation(user.radiant)
+        
       @users_layer.draw()
 
     set_icon: (user) ->
@@ -51,3 +54,6 @@ define [
       @users_layer.removeChildren()
       for name, user of @users
         @users_layer.add(user)
+        
+    update_orientations: (users) ->
+      

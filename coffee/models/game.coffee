@@ -17,7 +17,8 @@ define [
       height: 480
       
     initialize: (opts) ->
-      $.extend(@options, opts)
+      keys = [key for key in _.keys(opts) when opts[key]]
+      $.extend(@options, _.pick(opts, keys...))
       @ws = new WebSocket(@options.ws_host)
       @ws.onopen = => @openCallback()
       @ws.onerror = => @error()

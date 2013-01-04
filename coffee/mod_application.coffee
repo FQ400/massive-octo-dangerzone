@@ -15,7 +15,7 @@ define [
       @initRouter routes
       @init_mediator()
       Object.freeze? this
-    
+
     init_mediator: ->
       Chaplin.mediator.game = null
       Chaplin.mediator.user = null

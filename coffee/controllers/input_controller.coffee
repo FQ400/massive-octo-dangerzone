@@ -5,7 +5,7 @@ define [
   'use strict'
 
   class InputController extends Chaplin.Controller
-     
+
     initialize: ->
       super
       @keys = {37: 'left', 38: 'up', 39: 'right', 40: 'down'}

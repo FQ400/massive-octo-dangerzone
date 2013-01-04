@@ -15,7 +15,7 @@ define [
     initialize: ->
       super
       @delegate 'click', '#start-game', @setup
-      
+
     setup: (event) ->
       event.preventDefault()
       name = $('#username').val()

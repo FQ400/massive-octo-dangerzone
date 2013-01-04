@@ -10,7 +10,7 @@ define [
 
     constructor: ->
       Chaplin.mediator.subscribe 'chat:new_message', @new_message
-    
+
     show: (params) ->
       @model = new Chat()
       @view = new ChatView(model: @model)
@@ -23,7 +23,7 @@ define [
       $('#chat-content').append("<p>#{ msg }</p>")
       # scroll to bottom
       $('#chat-content').scrollTop($('#chat-content').height(), 0)
-      
+
     send_message: ->
       message = $('#chat-msg-input').val()
       if message

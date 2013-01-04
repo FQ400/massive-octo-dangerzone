@@ -15,7 +15,7 @@ define [
       @model = new MoD()
       @view = new MODView(model: @model)
       @subscribeEvent 'internal:start', @initialize_game_and_chat
-      
+
     initialize_game_and_chat: (data) ->
       @game = new GameController
       @game.show

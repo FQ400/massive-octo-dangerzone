@@ -14,14 +14,14 @@ define [
       @subscribeEvent 'internal:canvas_keyup', (code) =>
         @key('up', code)
       @subscribeEvent 'internal:canvas_mouse_move', (coords) =>
-        @calc_radiant(coords)
+        @calc_angle(coords)
       
 
     key: (type, code) ->
       if @keys[code]
         @send('key' + type, @keys[code])
         
-    calc_radiant: (coords) ->
+    calc_angle: (coords) ->
       p_pos = Chaplin.mediator.user.position
       # mouse position
       mx = coords[0]

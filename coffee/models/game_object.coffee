@@ -10,7 +10,7 @@ define [
       @position = position
       @set_icon(icon)
       @icon_ready = false
-      @radiant = 0
+      @angle = 0
 
     set_position: (pos) ->
       @position = pos

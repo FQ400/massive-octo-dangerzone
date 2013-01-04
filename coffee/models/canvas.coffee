@@ -51,7 +51,7 @@ define [
       for name, user of users
         pos = user.position
         @users[name].setPosition(pos[0], pos[1])
-        @users[name].setRotation(user.radiant)
+        @users[name].setRotation(user.angle)
       for id, obj of objects
         pos = obj.position
         @objects[id].setPosition(pos[0], pos[1])

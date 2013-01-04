@@ -71,12 +71,14 @@ define [
       console.log("leave: " + user)
 
     user_list: (data) ->
+      @users = {}
       for user in data.users
         @users[user.name] = new User(user.id, user.icon, user.position, user.name)
       Chaplin.mediator.user = @users[@model.options.name]
       Chaplin.mediator.publish 'internal:update_users', @users
 
     object_list: (data) ->
+      @objects = {}
       for obj in data.objects
         @objects[obj.id] = new GameObject(obj.id, obj.icon, obj.position)
       Chaplin.mediator.publish 'internal:update_objects', @objects
@@ -91,13 +93,13 @@ define [
 
     update_state: (data) ->
       if @initialized
-        @update_positions(data.positions, data.radiants)
+        @update_positions(data.positions, data.angles)
 
-    update_positions: (positions, radiants) ->
+    update_positions: (positions, angles) ->
       for user, position of positions.user
         @users[user].set_position(position)
-      for user, radiant of radiants.user
-        @users[user].radiant = radiant 
+      for user, angle of angles.user
+        @users[user].angle = angle 
       for obj, position of positions.object
         @objects[obj].position = position
       Chaplin.mediator.publish 'internal:update_positions', @users, @objects

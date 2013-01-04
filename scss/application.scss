@@ -17,7 +17,7 @@ $menu-width: $canvas-width + $chat-width;
   height: $canvas-height;
   border: 1px solid lime;
 }
-#menu {
+#menu-container {
   width: $menu-width;
   height: 50px;
   border: 1px solid black;

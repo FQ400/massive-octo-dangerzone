@@ -10,5 +10,4 @@ define [
     show: (params) ->
       @model = new Menu()
       @view = new MenuView(model: @model)
-      
     

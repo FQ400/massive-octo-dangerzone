@@ -9,7 +9,7 @@ define [
 
     template: template
     className: 'mod'
-    container: '#page-container'
+    container: '#menu-container'
     autoRender: true
 
     initialize: ->

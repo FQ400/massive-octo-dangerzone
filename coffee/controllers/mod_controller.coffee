@@ -5,13 +5,15 @@ define [
   'controllers/game_controller'
   'controllers/chat_controller'
   'controllers/menu_controller'
+  'controllers/configuration_controller'
   'controllers/input_controller'
-], (Chaplin, MODView, MoD, GameController, ChatController, MenuController, InputController) ->
+], (Chaplin, MODView, MoD, GameController, ChatController, MenuController, ConfigurationController, InputController) ->
   'use strict'
 
   class MODController extends Chaplin.Controller
 
     show: (params) ->
+      console.log "MODController#show"
       @model = new MoD()
       @view = new MODView(model: @model)
       @subscribeEvent 'internal:start', @initializeGameAndChat
@@ -27,6 +29,8 @@ define [
       
       @menu = new MenuController
       @menu.show()
+      
+      @configuration = new ConfigurationController
       
       @input = new InputController
 

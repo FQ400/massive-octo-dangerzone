@@ -15,12 +15,14 @@ define [
     initialize: ->
       super
       @delegate 'click', '#start-game', @setup
-      
+
     setup: (event) ->
       event.preventDefault()
       name = $('#username').val()
       icon = $('#icon').val()
+      host = $('#host').val()
       if name
         @publishEvent 'internal:start',
           name: name
           icon: icon
+          host: host

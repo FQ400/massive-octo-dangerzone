@@ -6,8 +6,7 @@ define [
   'use strict'
 
   class MenuController extends Chaplin.Controller
-      
+
     show: (params) ->
       @model = new Menu()
       @view = new MenuView(model: @model)
-    

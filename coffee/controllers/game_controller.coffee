@@ -12,11 +12,11 @@ define [
 
     constructor: ->
       super
-      @users = []
+      @users = {}
       @initialized = false
-      @subscribeToChannels()
-    
-    subscribeToChannels: ->
+      @subscribe_to_channels()
+
+    subscribe_to_channels: ->
       mediator = Chaplin.mediator
       # mediator.subscribe 'object:created', (data) =>
       #   id = data.id
@@ -25,7 +25,7 @@ define [
 
       @subscribeEvent 'internal:game-join', @join
       @subscribeEvent 'internal:game-leave', @leave
-      
+
       mediator.subscribe 'user:deleted', (data) =>
         name = data.data
         @user_deleted(name)
@@ -50,19 +50,19 @@ define [
         @user_list(data)
 
     show: (params) ->
-      @model = new Game(params)
+      Chaplin.mediator.game = @model = new Game(params)
       @view = new GameView(model: @model)
 
     join: ->
       payload = new GamePayload
         subtype: 'join'
-      Chaplin.mediator.sendToServer(payload)
+      Chaplin.mediator.send_to_server(payload)
       $('#game_canvas').focus()
 
     leave: ->
       payload = new GamePayload
         subtype: 'leave'
-      Chaplin.mediator.sendToServer(payload)
+      Chaplin.mediator.send_to_server(payload)
       @initialized = false
 
     user_join: (user) ->
@@ -74,6 +74,8 @@ define [
     user_list: (data) ->
       for user in data.data.users
         @users[user.name] = new User(user.name, user.icon, user.position)
+      Chaplin.mediator.user = @users[@model.options.name]
+      Chaplin.mediator.publish 'internal:update_users', @users
 
     user_deleted: (name) ->
       if @users[name]
@@ -94,8 +96,8 @@ define [
     update_state: (data) ->
       if @initialized
         @update_positions(data.data.positions)
-        @view.redraw(@users)
 
     update_positions: (positions) ->
       for user, position of positions.user
         @users[user].set_position(position)
+      Chaplin.mediator.publish 'internal:update_positions', @users

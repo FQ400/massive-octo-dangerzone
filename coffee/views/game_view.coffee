@@ -22,8 +22,3 @@ define [
     afterRender: ->
       super
       @canvas = new Canvas(document.getElementById('game_canvas'))
-
-    redraw: (users) ->
-      @canvas.clear()
-      for name, user of users
-        @canvas.draw_user(user)

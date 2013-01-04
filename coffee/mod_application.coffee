@@ -12,15 +12,13 @@ define [
       super
       @initDispatcher()
       @initLayout()
-      
-      @initMediator()
-      
       @initRouter routes
+      @init_mediator()
       Object.freeze? this
-    
-    initMediator: ->
+
+    init_mediator: ->
       Chaplin.mediator.game = null
-      Chaplin.mediator.sendToServer = (data) ->
+      Chaplin.mediator.user = null
+      Chaplin.mediator.send_to_server = (data) ->
         Chaplin.mediator.publish('server:send', data)
-      
       Chaplin.mediator.seal()

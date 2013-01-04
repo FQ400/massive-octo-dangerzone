@@ -5,7 +5,7 @@ define [
   'use strict'
 
   class InputController extends Chaplin.Controller
-     
+
     initialize: ->
       super
       @keys = {37: 'left', 38: 'up', 39: 'right', 40: 'down'}
@@ -22,7 +22,7 @@ define [
       payload = new GamePayload
         subtype: type
         data: key
-      Chaplin.mediator.sendToServer(payload)
+      Chaplin.mediator.send_to_server(payload)
 
     configure: (key, code) ->
       old_code = _.invert(@keys)[key]

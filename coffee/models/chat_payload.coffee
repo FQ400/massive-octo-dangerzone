@@ -4,6 +4,6 @@ define [
   'use strict'
 
   class ChatPayload extends WSPayload
-    
+
     options:
       type : 'chat'

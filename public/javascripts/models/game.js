@@ -55,10 +55,9 @@ define(['chaplin', 'models/ws_payload'], function(Chaplin, WSPayload) {
       this.ws.onclose = function() {
         return _this.close();
       };
-      this.ws.onmessage = function(msg) {
+      return this.ws.onmessage = function(msg) {
         return _this.server_message(msg);
       };
-      return console.log(this.options);
     };
 
     Game.prototype.socket_opened = function() {

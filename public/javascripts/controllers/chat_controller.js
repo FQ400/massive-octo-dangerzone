@@ -11,18 +11,19 @@ define(['chaplin', 'views/chat_view', 'models/chat', 'models/chat_payload'], fun
     __extends(ChatController, _super);
 
     function ChatController() {
-      Chaplin.mediator.subscribe('chat:new_message', this.new_message);
+      return ChatController.__super__.constructor.apply(this, arguments);
     }
 
+    ChatController.prototype.initialize = function() {
+      ChatController.__super__.initialize.apply(this, arguments);
+      this.subscribeEvent('internal:send_chat_message', this.send_message);
+      return Chaplin.mediator.subscribe('chat:new_message', this.new_message);
+    };
+
     ChatController.prototype.show = function(params) {
-      var _this = this;
       this.model = new Chat();
-      this.view = new ChatView({
+      return this.view = new ChatView({
         model: this.model
-      });
-      return $('#chat-submit').on('click', function(event) {
-        event.preventDefault();
-        return _this.send_message();
       });
     };
 
@@ -33,9 +34,8 @@ define(['chaplin', 'views/chat_view', 'models/chat', 'models/chat_payload'], fun
       return $('#chat-content').scrollTop($('#chat-content').height(), 0);
     };
 
-    ChatController.prototype.send_message = function() {
-      var message, payload;
-      message = $('#chat-msg-input').val();
+    ChatController.prototype.send_message = function(message) {
+      var payload;
       if (message) {
         payload = new ChatPayload({
           data: {
@@ -43,8 +43,7 @@ define(['chaplin', 'views/chat_view', 'models/chat', 'models/chat_payload'], fun
           },
           subtype: 'public_message'
         });
-        Chaplin.mediator.send_to_server(payload);
-        return $('#chat-msg-input').val('');
+        return Chaplin.mediator.send_to_server(payload);
       }
     };
 

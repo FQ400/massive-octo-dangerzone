@@ -8,15 +8,17 @@ define [
 
   class ChatController extends Chaplin.Controller
 
-    constructor: ->
+    initialize: ->
+      super
+      @subscribeEvent 'internal:send_chat_message', @send_message
       Chaplin.mediator.subscribe 'chat:new_message', @new_message
 
     show: (params) ->
       @model = new Chat()
       @view = new ChatView(model: @model)
-      $('#chat-submit').on 'click', (event) =>
-        event.preventDefault()
-        @send_message()
+      # $('#chat-submit').on 'click', (event) =>
+      #   event.preventDefault()
+      #   @send_message()
 
     new_message: (data) ->
       msg = data.message
@@ -24,12 +26,11 @@ define [
       # scroll to bottom
       $('#chat-content').scrollTop($('#chat-content').height(), 0)
 
-    send_message: ->
-      message = $('#chat-msg-input').val()
+    send_message: (message) ->
       if message
         payload = new ChatPayload
           data:
             message: message
           subtype: 'public_message'
         Chaplin.mediator.send_to_server(payload)
-        $('#chat-msg-input').val('')
+        

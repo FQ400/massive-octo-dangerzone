@@ -25,7 +25,6 @@ define [
       @ws.onerror = => @error()
       @ws.onclose = => @close()
       @ws.onmessage = (msg) => @server_message(msg)
-      console.log @options
 
     socket_opened: ->
       Chaplin.mediator.subscribe 'server:send', (data) =>

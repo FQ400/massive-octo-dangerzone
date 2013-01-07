@@ -11,6 +11,7 @@ $menu-width: $canvas-width + $chat-width;
   width: $canvas-width;
   height: $canvas-height;
   float: left;
+  cursor: crosshair;
 }
 #chat {
   float: left;

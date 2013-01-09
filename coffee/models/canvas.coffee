@@ -41,8 +41,7 @@ define [
 
     image: (icon, i) ->
       if i > 0
-        ratio = icon.width / icon.height
-        [width, height] = if ratio > 1 then [@i, @i / ratio] else [i * ratio, i]
+        [width, height] = @calculate_size(icon.width, icon.height, i)
       else
         [width, height] = [icon.width, icon.height]
       new Kinetic.Image({image: icon, width: width, height: height, offset: [width/2, height/2]})
@@ -55,6 +54,10 @@ define [
         pos = obj.position
         @objects[obj.id].setPosition(pos[0], pos[1])
         @objects[obj.id].setRotation(obj.angle)
+        [width, height] = @calculate_size(@objects[obj.id].getWidth(), @objects[obj.id].getHeight(), obj.size)
+        @objects[obj.id].setHeight(height)
+        @objects[obj.id].setWidth(width)
+        @objects[obj.id].setOffset([width/2, height/2])
       @objects_layer.draw()
 
     set_icon: (obj) ->
@@ -65,3 +68,7 @@ define [
       @delete_object(obj)
       @set_icon(obj)
       @objects_layer.draw()
+    
+    calculate_size: (width, height, size) ->
+        ratio = width / height
+        if ratio > 1 then [size, size / ratio] else [size * ratio, size]

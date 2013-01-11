@@ -11,10 +11,11 @@ define [
       ws_host   : 'ws://localhost:9020'
       name      : 'fnord'
       icon      : null
-
+    
     defaults:
       width: 640
       height: 480
+      
 
     initialize: (opts) ->
       keys = [key for key in _.keys(opts) when opts[key]]

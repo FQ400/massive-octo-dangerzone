@@ -1,26 +1,22 @@
 define [
   'chaplin',
   'models/game_payload',
-  'views/configuration_view',
-], (Chaplin, GamePayload, ConfigurationView) ->
+], (Chaplin, GamePayload) ->
   'use strict'
 
   class InputController extends Chaplin.Controller
 
-    initialize: (params) ->
+    initialize: ->
       super
-      @keys = {65: 'left', 87: 'up', 68: 'right', 83: 'down'}
+      @keys = {37: 'left', 38: 'up', 39: 'right', 40: 'down'}
       @subscribeEvent 'internal:canvas_keydown', (code) =>
         @key('down', code)
       @subscribeEvent 'internal:canvas_keyup', (code) =>
         @key('up', code)
       @subscribeEvent 'internal:canvas_mouse_move', (coords) =>
         @calc_angle(coords)
-        
-      @subscribeEvent 'internal:game-configuration', @open_config
-      @subscribeEvent 'internal:map_key', (data) =>
-        @configure(data.key, data.code)
       
+
     key: (type, code) ->
       if @keys[code]
         @send('key' + type, @keys[code])
@@ -44,13 +40,10 @@ define [
         subtype: type
         data: key
       Chaplin.mediator.send_to_server(payload)
-      
+
     configure: (key, code) ->
       old_code = _.invert(@keys)[key]
-      delete @keys[old_code]
+      @keys[old_code] = null
       @keys[code] = key
-      
-    open_config: ->
-      @config_view = new ConfigurationView()
       
     

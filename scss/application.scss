@@ -1,5 +1,4 @@
 @import 'chat';
-@import 'configuration';
 
 $canvas-width: 640px;
 $canvas-height: 480px;
@@ -24,19 +23,5 @@ $menu-width: $canvas-width + $chat-width;
   height: 50px;
   border: 1px solid black;
   clear: both;
-}
-
-.clearfix:after {
-  content: ".";
-  display: block;
-  height: 0;
-  clear: both;
-  visibility: hidden;
-}
-
-.shadow {
-  -moz-box-shadow:    inset 0 0 10px #000000;
-  -webkit-box-shadow: inset 0 0 10px #000000;
-  box-shadow:         inset 0 0 10px #000000;
 }
 

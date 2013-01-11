@@ -57,7 +57,7 @@ define [
     show: (params) ->
       Chaplin.mediator.game = @model = new Game(params)
       @view = new GameView(model: @model)
-    
+
     join: ->
       payload = new GamePayload
         subtype: 'join'

@@ -49,11 +49,6 @@ define [
       old_code = _.invert(@keys)[key]
       delete @keys[old_code]
       @keys[code] = key
-<<<<<<< HEAD
-=======
-      
+
     open_config: ->
       @config_view = new ConfigurationView()
-      
-    
->>>>>>> parent of cca3307... Revert "removed generated files to prevent to compile code after cloning"

@@ -19,7 +19,7 @@ define [
       Chaplin.mediator.subscribe 'internal:update_objects', (objects) => @update_objects(objects)
       Chaplin.mediator.subscribe 'internal:objects_created', (objects) => @objects_created(objects)
       Chaplin.mediator.subscribe 'internal:objects_deleted', (objects) => @objects_deleted(objects)
-      Chaplin.mediator.subscribe 'internal:update_positions', (users, objects) => @update_positions(users, objects)
+      #Chaplin.mediator.subscribe 'internal:update_positions', (objects) => @update_positions(objects)
 
     objects_created: (objects) ->
       for obj in objects

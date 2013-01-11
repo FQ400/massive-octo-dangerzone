@@ -11,7 +11,7 @@ define [
 
   class GameController extends Chaplin.Controller
 
-    constructor: ->
+    initialize: ->
       super
       @users = {}
       @objects = {}
@@ -36,23 +36,12 @@ define [
       mediator.subscribe 'game:init', (data) =>
         @init_state(data.id)
 
-      mediator.subscribe 'game:state', (data) =>
-        @update_state(data)
-
-      mediator.subscribe 'game:user_list', (data) =>
-        @user_list(data)
-
-      mediator.subscribe 'game:object_list', (data) =>
-        @object_list(data)
-
-      mediator.subscribe 'game:objects_created', (data) =>
-        @objects_created(data)
-
-      mediator.subscribe 'game:objects_deleted', (data) =>
-        @objects_deleted(data)
-
-      mediator.subscribe 'internal:shoot', (data) =>
-        @shoot(data)
+      mediator.subscribe 'game:state', (data) => @update_state(data)
+      mediator.subscribe 'game:user_list', (data) => @user_list(data)
+      mediator.subscribe 'game:object_list', (data) => @object_list(data)
+      mediator.subscribe 'game:objects_created', (data) => @objects_created(data)
+      mediator.subscribe 'game:objects_deleted', (data) => @objects_deleted(data)
+      mediator.subscribe 'internal:shoot', (data) => @shoot(data)
 
     show: (params) ->
       Chaplin.mediator.game = @model = new Game(params)

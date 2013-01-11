@@ -97,16 +97,14 @@ define [
 
     update_state: (data) ->
       if @initialized
-        @update_positions(data.positions, data.angles, data.sizes)
+        @update_objects(data)
 
-    update_positions: (positions, angles, sizes) ->
-      for obj in angles
+    update_objects: (data) ->
+      for obj in data.data
         @objects[obj.id].angle = obj.angle
-      for obj in positions
         @objects[obj.id].position = obj.position
-      for obj in sizes
         @objects[obj.id].size = obj.size
-      Chaplin.mediator.publish 'internal:update_positions', @objects
+      Chaplin.mediator.publish 'internal:update_objects', @objects
 
     shoot: (event) ->
       position = @view.page_coords_to_game([event.pageX, event.pageY])

@@ -49,7 +49,7 @@ define [
     circle: (radius, color='red') ->
       new Kinetic.Circle({radius: radius, fill: color, stroke: 'black'})
 
-    update_positions: (objects) ->
+    update_objects: (objects) ->
       for id, obj of objects
         pos = obj.position
         kin_obj = @objects[obj.id]

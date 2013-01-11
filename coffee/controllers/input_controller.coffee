@@ -15,12 +15,11 @@ define [
         @key('up', code)
       @subscribeEvent 'internal:canvas_mouse_move', (coords) =>
         @calc_angle(coords)
-      
 
     key: (type, code) ->
       if @keys[code]
         @send('key' + type, @keys[code])
-        
+
     calc_angle: (coords) ->
       return unless Chaplin.mediator.user
       p_pos = Chaplin.mediator.user.position
@@ -30,11 +29,11 @@ define [
       # player position
       px = p_pos[0]
       py = p_pos[1]
-      
+
       theta = Math.atan2(px - mx, py - my)
       if theta
         @send('rotate', theta)
-    
+
     send: (type, key) ->
       payload = new GamePayload
         subtype: type
@@ -45,5 +44,3 @@ define [
       old_code = _.invert(@keys)[key]
       @keys[old_code] = null
       @keys[code] = key
-      
-    

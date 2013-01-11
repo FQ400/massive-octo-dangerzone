@@ -12,7 +12,7 @@ define [
     container:        '#menu-container'
     containerMethod:  'html'
     autoRender:       true
-    
+
     initialize: ->
       @delegate 'click', '#join-game', (event) =>
         event.preventDefault()
@@ -25,13 +25,13 @@ define [
         @publishEvent 'internal:game-leave'
         $('#join-game').show()
         $('#leave-game').hide()
-        
+
       @delegate 'click', '#configure-game', (event) =>
         event.preventDefault()
         @publishEvent 'internal:game-configuration'
-      
+
       super
-       
+
     afterRender: ->
       super
       $('#leave-game').hide()

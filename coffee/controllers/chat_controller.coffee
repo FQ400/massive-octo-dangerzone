@@ -33,4 +33,4 @@ define [
             message: message
           subtype: 'public_message'
         Chaplin.mediator.send_to_server(payload)
-        
+

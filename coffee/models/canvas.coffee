@@ -52,12 +52,14 @@ define [
     update_positions: (objects) ->
       for id, obj of objects
         pos = obj.position
-        @objects[obj.id].setPosition(pos[0], pos[1])
-        @objects[obj.id].setRotation(obj.angle)
-        [width, height] = @calculate_size(@objects[obj.id].getWidth(), @objects[obj.id].getHeight(), obj.size)
-        @objects[obj.id].setHeight(height)
-        @objects[obj.id].setWidth(width)
-        @objects[obj.id].setOffset([width/2, height/2])
+        kin_obj = @objects[obj.id]
+        kin_obj.setPosition(pos[0], pos[1])
+        kin_obj.setRotation(obj.angle)
+        if kin_obj.shapeType == 'Image'
+          [width, height] = @calculate_size(kin_obj.getWidth(), kin_obj.getHeight(), obj.size)
+          kin_obj.setHeight(height)
+          kin_obj.setWidth(width)
+          kin_obj.setOffset([width/2, height/2])
       @objects_layer.draw()
 
     set_icon: (obj) ->

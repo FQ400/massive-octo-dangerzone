@@ -15,6 +15,7 @@ define [
         @key('up', code)
       @subscribeEvent 'internal:canvas_mouse_move', (coords) =>
         @calc_angle(coords)
+        @send('mouse_move', coords)
 
     key: (type, code) ->
       if @keys[code]

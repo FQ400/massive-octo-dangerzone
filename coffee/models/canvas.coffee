@@ -11,7 +11,7 @@ define [
       super
       @objects = {}
       @image_size = 60
-      @stage = new Kinetic.Stage({container: @container, width: 640, height: 480})
+      @stage = new Kinetic.Stage({container: @container, width: 800, height: 600})
       @objects_layer = new Kinetic.Layer()
       @stage.add(@objects_layer)
       Chaplin.mediator.subscribe 'internal:user_icon_ready', (user) => @update_icon(user)
@@ -19,7 +19,6 @@ define [
       Chaplin.mediator.subscribe 'internal:update_objects', (objects) => @update_objects(objects)
       Chaplin.mediator.subscribe 'internal:objects_created', (objects) => @objects_created(objects)
       Chaplin.mediator.subscribe 'internal:objects_deleted', (objects) => @objects_deleted(objects)
-      #Chaplin.mediator.subscribe 'internal:update_positions', (objects) => @update_positions(objects)
 
     objects_created: (objects) ->
       for obj in objects

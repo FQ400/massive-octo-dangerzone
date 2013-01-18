@@ -95,7 +95,7 @@ define [
         @update_objects(data)
 
     update_objects: (data) ->
-      for obj in data.data
+      for obj in data.objects
         @objects[obj.id].angle = obj.angle
         @objects[obj.id].position = obj.position
         @objects[obj.id].size = obj.size

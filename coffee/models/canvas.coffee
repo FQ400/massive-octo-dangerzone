@@ -71,5 +71,5 @@ define [
       @objects_layer.draw()
 
     calculate_size: (width, height, size) ->
-        ratio = width / height
-        if ratio > 1 then [size, size / ratio] else [size * ratio, size]
+      ratio = width / height
+      if ratio > 1 then [size, size / ratio] else [size * ratio, size]

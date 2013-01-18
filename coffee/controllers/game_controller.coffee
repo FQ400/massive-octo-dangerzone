@@ -37,7 +37,6 @@ define [
         @init_state(data.id)
 
       mediator.subscribe 'game:state', (data) => @update_state(data)
-      mediator.subscribe 'game:user_list', (data) => @user_list(data)
       mediator.subscribe 'game:object_list', (data) => @object_list(data)
       mediator.subscribe 'game:objects_created', (data) => @objects_created(data)
       mediator.subscribe 'game:objects_deleted', (data) => @objects_deleted(data)
@@ -65,12 +64,6 @@ define [
 
     user_leave: (user) ->
       console.log("leave: " + user)
-
-    user_list: (data) ->
-      @users = {}
-      for user in data.users
-        @users[user.name] = new User(user.id, user.icon, user.position, user.name)
-      Chaplin.mediator.publish 'internal:update_users', @users
 
     objects_created: (data) ->
       objects = []

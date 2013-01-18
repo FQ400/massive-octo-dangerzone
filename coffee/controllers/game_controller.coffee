@@ -75,8 +75,9 @@ define [
     objects_created: (data) ->
       objects = []
       for obj in data.objects
-        @objects[obj.id] = new GameObject(obj.id, obj.icon, obj.position, obj.size)
-        objects.push(@objects[obj.id])
+        if obj.visible
+          @objects[obj.id] = new GameObject(obj.id, obj.icon, obj.position, obj.size)
+          objects.push(@objects[obj.id])
       Chaplin.mediator.publish 'internal:objects_created', objects
 
     objects_deleted: (data) ->

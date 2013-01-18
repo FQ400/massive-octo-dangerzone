@@ -69,7 +69,8 @@ define [
       objects = []
       for obj in data.objects
         if obj.visible
-          @objects[obj.id] = new GameObject(obj.id, obj.icon, obj.position, obj.size)
+          gameObj = new GameObject(obj.id, obj.icon, obj.position, obj.size)
+          @objects[obj.id] = gameObj
           objects.push(@objects[obj.id])
       Chaplin.mediator.publish 'internal:objects_created', objects
 
@@ -98,6 +99,8 @@ define [
         @objects[obj.id].angle = obj.angle
         @objects[obj.id].position = obj.position
         @objects[obj.id].size = obj.size
+        if 'hp' in obj
+          @objects[obj.id].hp = obj.hp
       Chaplin.mediator.publish 'internal:update_objects', @objects
 
     shoot: (event) ->

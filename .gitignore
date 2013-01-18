@@ -3,4 +3,4 @@
 public/javascripts/*
 !public/javascripts/vendor
 !public/javascripts/templates
-public/stylesheets
+public/stylesheets/generated

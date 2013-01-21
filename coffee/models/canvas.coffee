@@ -15,16 +15,16 @@ define [
         container: @container
         width: 800
         height: 600
-      @objects_layer = new Kinetic.Layer()      
+      @objects_layer = new Kinetic.Layer()
       @stage.add(@objects_layer)
-      
+
       Chaplin.mediator.subscribe 'internal:user_icon_ready', (user) => @update_icon(user)
       Chaplin.mediator.subscribe 'internal:update_objects', (objects) => @update_objects(objects)
       Chaplin.mediator.subscribe 'internal:objects_created', (objects) => @objects_created(objects)
       Chaplin.mediator.subscribe 'internal:objects_deleted', (objects) => @objects_deleted(objects)
-      
+
       @setupHUD()
-      
+
     setupHUD: ->
       @hudLayer = new Kinetic.Layer
         opacity: 0.6
@@ -37,12 +37,11 @@ define [
         fontSize: 18
         fontStyle: 'bold'
         fill: 'red'
-      }) 
+      })
       @hudLayer.add(@hp)
       @hudLayer.draw()
-      
-      
-      
+
+
     objects_created: (objects) ->
       for obj in objects
         if obj.icon_ready
@@ -51,7 +50,6 @@ define [
           @objects[obj.id] = @circle(2, 'green')
           @objects_layer.add(@objects[obj.id])
       @objects_layer.draw()
-      
 
     objects_deleted: (objects) ->
       for obj in objects

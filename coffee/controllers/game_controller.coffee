@@ -95,13 +95,17 @@ define [
         @update_objects(data)
 
     update_objects: (data) ->
+      objects = []
       for obj in data.objects
+        objects.push(@objects[obj.id])
         @objects[obj.id].angle = obj.angle
         @objects[obj.id].position = obj.position
         @objects[obj.id].size = obj.size
         if 'hp' in obj
           @objects[obj.id].hp = obj.hp
-      Chaplin.mediator.publish 'internal:update_objects', @objects
+      diff = _.intersection(objects, _.values(@objects))
+      Chaplin.mediator.publish 'internal:update_objects', objects
+      Chaplin.mediator.publish 'internal:hide_objects', diff
 
     shoot: (event) ->
       position = @view.page_coords_to_game([event.pageX, event.pageY])

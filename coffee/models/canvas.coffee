@@ -10,7 +10,6 @@ define [
     constructor: (element) ->
       super
       @objects = {}
-      @image_size = 60
       @stage = new Kinetic.Stage
         container: @container
         width: 800
@@ -20,6 +19,7 @@ define [
 
       Chaplin.mediator.subscribe 'internal:user_icon_ready', (user) => @update_icon(user)
       Chaplin.mediator.subscribe 'internal:update_objects', (objects) => @update_objects(objects)
+      Chaplin.mediator.subscribe 'internal:hide_objects', (objects) => @hide_objects(objects)
       Chaplin.mediator.subscribe 'internal:objects_created', (objects) => @objects_created(objects)
       Chaplin.mediator.subscribe 'internal:objects_deleted', (objects) => @objects_deleted(objects)
 
@@ -60,9 +60,9 @@ define [
       @objects[obj.id].remove()
       delete @objects[obj.id]
 
-    image: (icon, i) ->
-      if i > 0
-        [width, height] = @calculate_size(icon.width, icon.height, i)
+    image: (icon, size) ->
+      if size > 0
+        [width, height] = @calculate_size(icon.width, icon.height, size)
       else
         [width, height] = [icon.width, icon.height]
       new Kinetic.Image({image: icon, width: width, height: height, offset: [width/2, height/2]})
@@ -74,6 +74,7 @@ define [
       for id, obj of objects
         pos = obj.position
         kin_obj = @objects[obj.id]
+        kin_obj.show()
         kin_obj.setPosition(pos[0], pos[1])
         kin_obj.setRotation(obj.angle)
         if kin_obj.shapeType == 'Image'
@@ -82,6 +83,10 @@ define [
           kin_obj.setWidth(width)
           kin_obj.setOffset([width/2, height/2])
       @objects_layer.draw()
+
+    hide_objects: (objects) ->
+      for id, obj of objects
+        @objects[obj.id].hide()
 
     set_icon: (obj) ->
       @objects[obj.id] = @image(obj.icon, obj.size)
